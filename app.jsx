@@ -100,7 +100,7 @@ const Lock = (p) => (
 /* App identity                                                           */
 /* ---------------------------------------------------------------------- */
 
-const APP_VERSION = "0.7.0";
+const APP_VERSION = "0.9.0";
 const SCHEMA_VERSION = 2;
 
 /* ---------------------------------------------------------------------- */
@@ -1050,25 +1050,42 @@ const SUBJECTS = {
             learn: [
               {
                 band: 1,
-                title: "DNA carries genetic information",
-                body: "Genes are specific sections of DNA that code for traits. Chromosomes are structures that carry many genes. Different versions of the same gene are called alleles, which are responsible for variations in traits.",
+                title: "Genes are DNA instructions",
+                body: "A gene is a section of DNA that codes for one trait.",
                 children: [
                   {
                     band: 2,
-                    title: "Genotype vs Phenotype",
-                    body: "Genotype is the allele combination an organism has for a gene (its genetic makeup). Phenotype is the observable physical expression of that genotype. Genotype determines phenotype.",
+                    title: "Alleles are versions of a gene",
+                    body: "An allele is a different version of the same gene — different alleles create different traits.",
                   },
                   {
                     band: 2,
-                    title: "Homozygous vs Heterozygous",
-                    body: "Homozygous means having two identical alleles for a gene (either both dominant or both recessive). Heterozygous means having two different alleles for a gene.",
+                    title: "Chromosomes carry genes",
+                    body: "A chromosome is a structure that carries many genes together.",
+                  },
+                ],
+              },
+              {
+                band: 1,
+                title: "Genotype vs phenotype",
+                body: "Genotype is the alleles an organism has. Phenotype is the physical trait you can actually see.",
+                children: [
+                  {
+                    band: 2,
+                    title: "Homozygous vs heterozygous",
+                    body: "Homozygous means two identical alleles for a gene. Heterozygous means two different alleles.",
+                  },
+                  {
+                    band: 2,
+                    title: "Carrier status",
+                    body: "A heterozygous carrier has one copy of a recessive allele but doesn't show that trait themselves — like carrying sickle cell without having the disease.",
                   },
                 ],
               },
               {
                 band: 3,
-                title: "How genotype complexity influences disease expression",
-                body: "An organism's phenotype isn't always a simple one-to-one mirror of its genotype — environmental factors can interact with genetic predispositions, and carrier states in heterozygous individuals mean recessive alleles can be hidden across generations without being physically expressed.",
+                title: "Why genotype isn't the whole story",
+                body: "Environment can affect how a genotype is expressed, and heterozygous carriers can pass a recessive allele down for generations without ever showing the trait themselves.",
               },
             ],
             questions: [
@@ -1096,12 +1113,32 @@ const SUBJECTS = {
                 answer: "Phenotype",
               },
               {
+                id: "gen_q17",
+                band: 1,
+                type: "text",
+                prompt: "What structure carries many genes together?",
+                answers: ["chromosome", "chromosomes"],
+              },
+              {
                 id: "gen_q4",
                 band: 2,
                 type: "mcq",
                 prompt: "An individual with two different alleles for a specific gene is described as:",
                 options: ["Homozygous dominant", "Homozygous recessive", "Heterozygous", "Mutated"],
                 answer: "Heterozygous",
+              },
+              {
+                id: "gen_q18",
+                band: 2,
+                type: "mcq",
+                prompt: "A person carries one sickle cell allele but shows no symptoms themselves. What best describes them?",
+                options: [
+                  "Homozygous dominant",
+                  "Homozygous recessive",
+                  "A heterozygous carrier",
+                  "A new mutant",
+                ],
+                answer: "A heterozygous carrier",
               },
               {
                 id: "gen_q5",
@@ -1125,25 +1162,42 @@ const SUBJECTS = {
             learn: [
               {
                 band: 1,
-                title: "Sources of genetic variation",
-                body: "Genetic variation within a population is essential for adaptability and survival. It is driven primarily by mutations and sexual reproduction.",
+                title: "Mutation",
+                body: "A mutation is a permanent change in the DNA base sequence.",
                 children: [
                   {
                     band: 2,
-                    title: "Mutation",
-                    body: "A permanent change in the DNA base sequence. Mutations are the ultimate source of all new alleles.",
+                    title: "Mutations create new alleles",
+                    body: "Mutations are the ultimate source of every new allele in a population.",
+                  },
+                ],
+              },
+              {
+                band: 1,
+                title: "Meiosis creates variation",
+                body: "Meiosis is the cell division that produces sex cells with new combinations of alleles.",
+                children: [
+                  {
+                    band: 2,
+                    title: "Crossing over",
+                    body: "Homologous chromosomes swap sections of DNA during meiosis, mixing alleles together.",
                   },
                   {
                     band: 2,
-                    title: "Meiosis and sexual reproduction",
-                    body: "Meiosis generates genetic diversity through crossing over, independent assortment, and random fertilisation, creating new allele combinations in offspring.",
+                    title: "Independent assortment",
+                    body: "Chromosomes are distributed randomly into sex cells during meiosis.",
+                  },
+                  {
+                    band: 2,
+                    title: "Random fertilisation",
+                    body: "Any sperm can fertilise any egg, adding another layer of randomness to the mix.",
                   },
                 ],
               },
               {
                 band: 3,
                 title: "Why genetic variation matters for populations",
-                body: "Greater genetic variation enhances a species' survival potential under environmental change, by increasing the statistical likelihood that some individuals carry beneficial alleles capable of surviving novel pressures like diseases or climate shifts.",
+                body: "More genetic variation means a population is more likely to have some individuals with alleles suited to survive a new threat, like disease or climate change.",
               },
             ],
             questions: [
@@ -1163,12 +1217,27 @@ const SUBJECTS = {
                 answer: "Mutation",
               },
               {
+                id: "gen_q20",
+                band: 1,
+                type: "text",
+                prompt: "What type of cell division produces sex cells with new combinations of alleles?",
+                answers: ["meiosis"],
+              },
+              {
                 id: "gen_q8",
                 band: 2,
                 type: "mcq",
                 prompt: "Which meiosis process involves the exchange of genetic material between homologous chromosomes?",
                 options: ["Independent assortment", "Crossing over", "Random fertilisation", "Binary fission"],
                 answer: "Crossing over",
+              },
+              {
+                id: "gen_q19",
+                band: 2,
+                type: "mcq",
+                prompt: "Which meiosis process randomly distributes chromosomes into sex cells?",
+                options: ["Crossing over", "Independent assortment", "Random fertilisation", "Mitosis"],
+                answer: "Independent assortment",
               },
               {
                 id: "gen_q9",
@@ -1192,25 +1261,35 @@ const SUBJECTS = {
             learn: [
               {
                 band: 1,
-                title: "Tracking genetic relationships",
-                body: "Scientists use various tools to identify, follow, and predict alleles and genetic relationships within families and populations.",
+                title: "Tracking inheritance",
+                body: "Scientists use several tools to track how alleles pass through families and populations.",
                 children: [
                   {
                     band: 2,
-                    title: "Punnett squares and pedigree charts",
-                    body: "Punnett squares calculate the probability of offspring inheriting specific genotypes, while pedigree charts map inheritance patterns across family generations.",
+                    title: "Punnett squares",
+                    body: "A Punnett square predicts the probability of offspring genotypes from a cross.",
+                  },
+                  {
+                    band: 2,
+                    title: "Pedigree charts",
+                    body: "A pedigree chart maps how a trait has passed through generations of a family.",
                   },
                   {
                     band: 2,
                     title: "DNA sequencing",
-                    body: "Directly reading DNA base sequences allows scientists to identify genetic markers and measure relatedness between individuals or species.",
+                    body: "DNA sequencing reads the exact base sequence to identify genetic markers.",
+                  },
+                  {
+                    band: 2,
+                    title: "Phylogenetic trees",
+                    body: "A phylogenetic tree shows how closely related species or individuals are, based on genetic similarity.",
                   },
                 ],
               },
               {
                 band: 3,
-                title: "Limitations of predictive tracking models",
-                body: "While Punnett squares give exact statistical probabilities, real-world inheritance can be complicated by linked genes, multiple alleles, and environmental influences that skew expected Mendelian ratios in large populations.",
+                title: "Why predictions aren't always exact",
+                body: "Punnett squares give exact odds, but real inheritance can be skewed by linked genes, multiple alleles, and environmental effects.",
               },
             ],
             questions: [
@@ -1228,6 +1307,14 @@ const SUBJECTS = {
                 type: "text",
                 prompt: "What chart maps inheritance patterns across multiple family generations?",
                 answers: ["pedigree chart", "pedigree", "family tree"],
+              },
+              {
+                id: "gen_q21",
+                band: 1,
+                type: "mcq",
+                prompt: "What kind of diagram shows how closely related species are, based on genetic similarity?",
+                options: ["Punnett square", "Phylogenetic tree", "Pedigree chart", "Karyotype"],
+                answer: "Phylogenetic tree",
               },
               {
                 id: "gen_q12",
@@ -1258,6 +1345,83 @@ const SUBJECTS = {
             ],
           },
           {
+            id: "gen-population",
+            name: "Population Genetics",
+            blurb: "How mating, migration, and allele frequencies shape a population's genetic diversity",
+            learn: [
+              {
+                band: 1,
+                title: "Variation helps populations survive",
+                body: "More genetic variation in a population means better adaptability and a higher chance of survival.",
+                children: [
+                  {
+                    band: 2,
+                    title: "Mating patterns",
+                    body: "Who breeds with whom affects which alleles get passed on to the next generation.",
+                  },
+                  {
+                    band: 2,
+                    title: "Migration",
+                    body: "Individuals moving between populations mix their allele pools together.",
+                  },
+                  {
+                    band: 2,
+                    title: "Allele frequencies",
+                    body: "How common each allele is within a population can shift over time.",
+                  },
+                ],
+              },
+              {
+                band: 3,
+                title: "Population size and migration together",
+                body: "Small, isolated populations can lose genetic variation over time, while migration between populations adds new alleles and increases diversity.",
+              },
+            ],
+            questions: [
+              {
+                id: "gen_q23",
+                band: 1,
+                type: "mcq",
+                prompt: "What does more genetic variation in a population generally improve?",
+                options: [
+                  "Its adaptability and survival chances",
+                  "Its exact population size",
+                  "Its rate of mutation only",
+                  "Its need for migration",
+                ],
+                answer: "Its adaptability and survival chances",
+              },
+              {
+                id: "gen_q24",
+                band: 1,
+                type: "text",
+                prompt: "What term describes individuals moving between populations, mixing their alleles?",
+                answers: ["migration"],
+              },
+              {
+                id: "gen_q25",
+                band: 2,
+                type: "mcq",
+                prompt: "Which term describes how common a particular allele is within a population?",
+                options: ["Allele frequency", "Genotype", "Phenotype", "Mutation rate"],
+                answer: "Allele frequency",
+              },
+              {
+                id: "gen_q26",
+                band: 3,
+                type: "mcq",
+                prompt: "Why can small, isolated populations be more vulnerable to environmental change than large, well-mixed ones?",
+                options: [
+                  "They have less genetic variation to draw on",
+                  "They mutate more slowly than other populations",
+                  "They cannot reproduce sexually",
+                  "They automatically develop resistance to disease",
+                ],
+                answer: "They have less genetic variation to draw on",
+              },
+            ],
+          },
+          {
             id: "gen-ccr5",
             name: "Applied Context: CCR5 & HIV Resistance",
             blurb: "Real-world application of genetics to medical research and viral resistance",
@@ -1265,24 +1429,24 @@ const SUBJECTS = {
               {
                 band: 1,
                 title: "The CCR5 gene and viral resistance",
-                body: "A specific variation in the CCR5 gene produces a mutant allele that alters a receptor protein on white blood cells, conferring natural resistance to HIV infection.",
+                body: "A mutant CCR5 allele changes a receptor on white blood cells, giving natural resistance to HIV.",
                 children: [
                   {
                     band: 2,
-                    title: "Genotypes in the CCR5 context",
-                    body: "Individuals homozygous for the mutant allele (hh) are resistant to HIV, whereas susceptible individuals are heterozygous or homozygous for the normal allele (Hh or HH).",
+                    title: "CCR5 genotypes",
+                    body: "hh (homozygous mutant) is resistant to HIV. HH or Hh is susceptible.",
                   },
                   {
                     band: 2,
-                    title: "Medical applications",
-                    body: "Understanding such genetic variations helps researchers develop targeted drug therapies and improve healthcare equity by tailoring treatments.",
+                    title: "Why this matters medically",
+                    body: "Studying this mutation helps researchers design targeted antiviral treatments.",
                   },
                 ],
               },
               {
                 band: 3,
                 title: "Broader implications of genetic discovery",
-                body: "Discoveries like the CCR5 mutation demonstrate how basic genetics research directly translates into novel antiviral strategies, though equitable global access to resulting therapies remains a significant societal challenge.",
+                body: "This discovery shows how genetics research leads to new treatments — though making them available worldwide is still a challenge.",
               },
             ],
             questions: [
@@ -1293,6 +1457,19 @@ const SUBJECTS = {
                 prompt: "What does the mutant allele of the CCR5 gene alter in the body?",
                 options: ["Red blood cell shape", "A white blood cell receptor protein", "Enzyme production in the liver", "Digestive acid levels"],
                 answer: "A white blood cell receptor protein",
+              },
+              {
+                id: "gen_q22",
+                band: 1,
+                type: "mcq",
+                prompt: "What does HIV normally use the CCR5 receptor to do?",
+                options: [
+                  "Enter white blood cells",
+                  "Enter red blood cells",
+                  "Cause mutations directly",
+                  "Break down DNA",
+                ],
+                answer: "Enter white blood cells",
               },
               {
                 id: "gen_q15",
@@ -2064,49 +2241,59 @@ const SUBJECTS = {
             learn: [
               {
                 band: 1,
-                title: "The core principle of physical properties",
-                body: "Physical properties depend directly on particle arrangement, bonding type, and the relative strength of attractive forces between particles: PHYSICAL PROPERTY -> PARTICLE ARRANGEMENT/STRUCTURE -> ATTRACTIVE FORCES/BONDING -> BEHAVIOUR AND USE.",
+                title: "The core idea",
+                body: "A material's physical properties come from its particle arrangement and bonding strength.",
                 children: [
                   {
                     band: 2,
-                    title: "Why particle forces matter",
-                    body: "Stronger attractive forces require more energy or force to separate particles, leading to higher melting points and hardness. Weaker forces mean less energy is needed.",
+                    title: "Stronger forces = higher melting point",
+                    body: "Stronger attractive forces need more energy to overcome — giving higher melting points and greater hardness.",
                   },
                   {
                     band: 2,
-                    title: "Mobile charge carriers",
-                    body: "Electrical conductivity requires charged particles that are free to move, such as delocalised electrons in metals or mobile ions in molten/aqueous ionic substances.",
+                    title: "Conductivity needs mobile charge",
+                    body: "Electrical conductivity needs charged particles that can move freely, like delocalised electrons in metals.",
                   },
                 ],
               },
               {
                 band: 1,
                 title: "What is a physical property?",
-                body: "A physical property is a characteristic that can be observed or measured without changing what the substance actually is chemically — density, melting point, hardness, and solubility are all physical properties.",
+                body: "A physical property can be measured without changing what the substance chemically is — like density or melting point.",
                 children: [
                   {
                     band: 2,
                     title: "Physical change vs chemical change",
-                    body: "Melting, dissolving, bending, and cutting are physical changes — no new substance is formed. A physical property is what you can observe or measure; a chemical property is how a substance reacts to form new substances.",
+                    body: "A physical change doesn't create a new substance — melting and dissolving are physical changes.",
                   },
                 ],
               },
               {
                 band: 1,
                 title: "Five main types of solid",
-                body: "Almost every material fits one of five categories: ionic solids, metallic solids, covalent molecular substances, covalent network solids, and polymers — each with its own typical particles, bonding, and properties.",
+                body: "Most materials fit one of five types: ionic, metallic, molecular, covalent network, or polymer.",
                 children: [
                   {
                     band: 2,
-                    title: "Comparing the five types",
-                    body: "Ionic and covalent network solids tend to have very high melting points from strong bonding throughout a rigid structure. Metals conduct electricity and heat well because of delocalised electrons. Molecular substances and polymers are held together internally by strong covalent bonds but only weak forces between molecules/chains, giving low melting points and flexibility.",
+                    title: "Ionic and network solids: high melting points",
+                    body: "Ionic and covalent network solids have very high melting points — strong bonding holds their whole rigid structure together.",
+                  },
+                  {
+                    band: 2,
+                    title: "Metals conduct well",
+                    body: "Metals conduct electricity and heat well because of their delocalised electrons.",
+                  },
+                  {
+                    band: 2,
+                    title: "Molecular substances and polymers are flexible",
+                    body: "Molecular substances and polymers have strong bonds inside but only weak forces between molecules — giving low melting points and flexibility.",
                   },
                 ],
               },
               {
                 band: 3,
                 title: "Evaluating structural suitability",
-                body: "An Excellence-level explanation connects the physical property to particle arrangement, bonding type, and relative force strength to justify why a material is suitable for a specific use, and compares it against alternatives where appropriate.",
+                body: "A strong Excellence answer links property, structure, and bonding to justify a material's use — and compares it to alternatives.",
               },
             ],
             questions: [
@@ -2211,41 +2398,46 @@ const SUBJECTS = {
               {
                 band: 1,
                 title: "Ionic structure and bonding",
-                body: "Ionic solids form a giant, regular 3D lattice of positive ions (cations) and negative ions (anions), held together by strong electrostatic attraction — the ionic bond. NaCl is a lattice of ions, never a collection of separate NaCl molecules.",
+                body: "Ionic solids are a giant 3D lattice of positive and negative ions, held by strong electrostatic attraction.",
                 children: [
                   {
                     band: 2,
-                    title: "Why ionic solids have high melting points",
-                    body: "Strong electrostatic attractions between oppositely charged ions hold the lattice together, so a large amount of heat energy is needed to separate the ions — giving ionic solids like NaCl (melting point ~801°C) high melting points.",
+                    title: "Not molecules",
+                    body: "NaCl is a lattice of ions, never separate NaCl molecules.",
                   },
                   {
                     band: 2,
-                    title: "Why ionic solids are hard but brittle",
-                    body: "The rigid lattice resists deformation, making ionic solids hard. But if force shifts a layer of ions, ions of the same charge can end up next to each other; like charges repel, cracking the lattice — so ionic solids are brittle rather than malleable.",
+                    title: "Why ionic solids have high melting points",
+                    body: "Strong ion attractions need lots of energy to break — giving ionic solids like NaCl a high melting point (~801°C).",
+                  },
+                  {
+                    band: 2,
+                    title: "Hard but brittle",
+                    body: "The rigid lattice resists deformation (hard). But force can shift a layer so like charges repel — cracking the lattice (brittle).",
                   },
                 ],
               },
               {
                 band: 1,
                 title: "Electrical conductivity and solubility",
-                body: "Solid ionic compounds do not conduct electricity, but molten or dissolved ionic compounds do — because the mobility of the ions is what changes, not their charge.",
+                body: "Solid ionic compounds don't conduct electricity — but molten or dissolved ones do.",
                 children: [
                   {
                     band: 2,
                     title: "Conductivity depends on ion mobility",
-                    body: "In a solid, ions are fixed in the lattice and cannot carry charge. Melting or dissolving frees the ions to move, so they can carry current — this is why NaCl(s) does not conduct but NaCl(aq) does.",
+                    body: "Ions are fixed in a solid, so they can't carry charge. Melting or dissolving frees them to move.",
                   },
                   {
                     band: 2,
-                    title: "Why many ionic solids dissolve in water",
-                    body: "Water is polar: the oxygen end attracts cations and the hydrogen ends attract anions. When these water-ion attractions are strong enough to overcome the attractions within the lattice, ions are pulled free and surrounded by water molecules.",
+                    title: "Why ionic solids dissolve in water",
+                    body: "Water is polar — it pulls cations and anions away from the lattice and surrounds them.",
                   },
                 ],
               },
               {
                 band: 3,
                 title: "Evaluating ionic solids for a use",
-                body: "Titanium dioxide (TiO2) is hard enough to resist scratching in lenses, because its strong ionic lattice resists deformation — but a hard impact can still shatter it, because shifting ion layers brings like charges together and they repel. A full evaluation names both the useful property and its limitation.",
+                body: "TiO2 resists scratching (hard lattice) but can shatter on impact (brittle) — a full answer names both.",
               },
             ],
             questions: [
@@ -2351,36 +2543,46 @@ const SUBJECTS = {
               {
                 band: 1,
                 title: "Metallic structure and bonding",
-                body: "Metals form a giant 3D lattice of positive metal cations surrounded by a 'sea' of delocalised electrons. The metallic bond — strong electrostatic attraction between cations and delocalised electrons — is non-directional, unlike the fixed directions of an ionic lattice.",
+                body: "Metals are a lattice of positive metal ions surrounded by a 'sea' of delocalised electrons.",
                 children: [
                   {
                     band: 2,
-                    title: "Why metals conduct electricity and heat well",
-                    body: "Delocalised electrons are free to move through the whole structure. An applied voltage makes them flow, carrying charge; when heated, they transfer kinetic energy rapidly through the metal — giving metals excellent electrical and thermal conductivity.",
+                    title: "Metallic bonds are non-directional",
+                    body: "Unlike ionic bonds, metallic bonds aren't fixed in one direction — this lets layers of atoms slide.",
                   },
                   {
                     band: 2,
-                    title: "Why metals are malleable and ductile",
-                    body: "Because metallic bonding is non-directional, layers of metal ions can slide past each other under force while the delocalised electrons keep attracting them — so metals bend into sheets (malleable) or draw into wire (ductile) instead of shattering.",
+                    title: "Metals conduct electricity and heat well",
+                    body: "Delocalised electrons flow freely through the metal, carrying both electric charge and heat energy.",
+                  },
+                  {
+                    band: 2,
+                    title: "Metals are malleable and ductile",
+                    body: "Non-directional bonds let layers of atoms slide without breaking — so metals bend or draw into wire instead of shattering.",
+                  },
+                  {
+                    band: 2,
+                    title: "Metals generally have high melting points",
+                    body: "Strong metallic bonding throughout the lattice means metals generally have high melting points too.",
                   },
                 ],
               },
               {
                 band: 1,
                 title: "Alloys",
-                body: "An alloy is a mixture of a metal with one or more other elements (metal or non-metal), such as brass (copper + zinc) or steel (iron + carbon). Alloys keep metallic bonding, but the different-sized atoms disrupt the regular lattice.",
+                body: "An alloy is a metal mixed with other elements — like brass (copper + zinc) or steel (iron + carbon).",
                 children: [
                   {
                     band: 2,
                     title: "Why alloys are harder than pure metals",
-                    body: "Different-sized atoms distort the regular metallic lattice, so layers cannot slide past each other as easily as in a pure metal. This means more force is needed to deform the structure — alloys are generally harder and stronger, but less malleable and ductile.",
+                    body: "Different-sized atoms distort the lattice, so layers can't slide as easily — making alloys harder but less malleable.",
                   },
                 ],
               },
               {
                 band: 3,
                 title: "Choosing metals and alloys for a purpose",
-                body: "Selecting a metal or alloy means weighing multiple properties against the use: e.g. an aluminium-magnesium alloy suits a strong, lightweight phone case better than aluminium-gold, because magnesium is both harder and far less dense than gold. Copper suits electrical wiring because ductility, conductivity, and a high melting point are all needed together.",
+                body: "An aluminium-magnesium alloy suits a strong, light phone case better than aluminium-gold, since magnesium is harder and far less dense. Copper's ductility, conductivity, and high melting point together suit it to wiring.",
               },
             ],
             questions: [
@@ -2487,41 +2689,41 @@ const SUBJECTS = {
               {
                 band: 1,
                 title: "Molecular structure and bonding",
-                body: "A molecular substance is made of discrete molecules. Strong covalent bonds hold atoms together within each molecule (intramolecular), but only weak intermolecular forces act between neighbouring molecules.",
+                body: "A molecular substance is discrete molecules — strong covalent bonds within them, weak forces between them.",
                 children: [
                   {
                     band: 2,
-                    title: "Why molecular substances have low melting and boiling points",
-                    body: "Melting and boiling mainly overcome the weak intermolecular forces between molecules — the strong covalent bonds within each molecule stay intact. Since little energy is needed to overcome weak intermolecular forces, melting and boiling points are relatively low.",
+                    title: "Why molecular substances have low melting points",
+                    body: "Melting only breaks the weak forces between molecules, not the strong bonds within — so melting points are low.",
                   },
                   {
                     band: 2,
-                    title: "Why molecular substances don't conduct electricity",
-                    body: "Electrons are held within covalent bonds inside each molecule. There are no delocalised electrons and no mobile ions, so there is no charge carrier available — molecular substances are generally electrical insulators.",
+                    title: "Why they don't conduct electricity",
+                    body: "Electrons are locked inside each molecule's covalent bonds — there's no mobile charge to carry current.",
                   },
                 ],
               },
               {
                 band: 1,
                 title: "Volatility and solubility",
-                body: "Volatility (readily evaporating) and solubility in water both depend on how strong the interactions between molecules — and between molecules and water — actually are.",
+                body: "How readily a substance evaporates or dissolves depends on how strong its intermolecular forces are.",
                 children: [
                   {
                     band: 2,
                     title: "Volatility",
-                    body: "Weak intermolecular forces mean only a small amount of energy is needed for a molecule to escape the liquid surface, so substances like ethanol evaporate readily — this is why ethanol is volatile.",
+                    body: "Weak intermolecular forces mean little energy is needed to evaporate — this is why ethanol is volatile.",
                   },
                   {
                     band: 2,
                     title: "Solubility depends on the molecule",
-                    body: "A molecular substance dissolves when water-solute attractions are strong enough to overcome water-water and solute-solute attractions — true for polar molecules like ethanol, but not for oil, where water-water attractions stay stronger and oil forms a separate layer.",
+                    body: "A substance dissolves when water's attraction to it beats water's attraction to itself — true for ethanol, not for oil.",
                   },
                 ],
               },
               {
                 band: 3,
                 title: "Evaluating molecular substances for a use",
-                body: "To form a barrier that stays separate from boiling water, oil (a molecular substance) works better than salt (an ionic solid) — oil's weak attraction to water is not enough to dissolve it, while water strongly attracts and separates salt's ions. Ethanol's volatility makes it useful in hand sanitiser because it evaporates rather than lingering on skin.",
+                body: "Oil beats salt as a water-repelling barrier — oil's pull to water is too weak to dissolve it, while salt's ions get pulled apart easily.",
               },
             ],
             questions: [
@@ -2633,29 +2835,39 @@ const SUBJECTS = {
               {
                 band: 1,
                 title: "Diamond and graphite: two forms of carbon",
-                body: "Diamond and graphite are both giant covalent networks made only of carbon, but the atoms are arranged differently: diamond bonds each carbon to four others in a 3D network, while graphite bonds each carbon to three others in 2D layers, leaving one electron per carbon delocalised.",
+                body: "Diamond and graphite are both pure carbon — just arranged differently.",
                 children: [
                   {
                     band: 2,
-                    title: "Why diamond is extremely hard and does not conduct",
-                    body: "Strong covalent bonds extend throughout diamond's 3D network, so a very large amount of force is needed to break or deform it — extreme hardness. All four valence electrons per carbon are used in bonds, so there are no delocalised electrons and diamond does not conduct electricity.",
+                    title: "Diamond: a 3D network",
+                    body: "Each carbon atom bonds to 4 others in a rigid 3D network.",
                   },
                   {
                     band: 2,
-                    title: "Why graphite is soft, slippery, and conducts electricity",
-                    body: "Within each layer, covalent bonds are strong, but the forces between layers are weak, so layers slide over one another easily — making graphite soft and a good lubricant. Each carbon's delocalised electron can move through the layers, so graphite conducts electricity, unlike diamond.",
+                    title: "Graphite: 2D layers",
+                    body: "Each carbon atom bonds to 3 others in flat layers, leaving one electron free.",
+                  },
+                  {
+                    band: 2,
+                    title: "Why diamond is extremely hard and doesn't conduct",
+                    body: "Strong bonds throughout the network make diamond extremely hard. All its electrons are locked in bonds, so it can't conduct.",
+                  },
+                  {
+                    band: 2,
+                    title: "Why graphite is soft and conducts",
+                    body: "Weak forces between layers let them slide — making graphite soft. Its free electrons let it conduct electricity.",
                   },
                 ],
               },
               {
                 band: 1,
                 title: "Silicon dioxide (SiO2)",
-                body: "Silicon dioxide is a 3D covalent network of silicon and oxygen atoms joined by strong covalent bonds throughout. Like diamond, it is very hard, has a very high melting point (~1700°C), is insoluble in water, and does not conduct electricity. It's a major component of sand and concrete.",
+                body: "SiO2 is a 3D network of silicon and oxygen — very hard, high-melting, and used in sand and concrete.",
               },
               {
                 band: 3,
                 title: "Choosing between covalent network solids",
-                body: "Concrete (containing SiO2) is chosen over bitumen for heavy-duty roads because SiO2's rigid 3D covalent network makes it far harder and gives it a much higher melting point than a molecular substance held together mainly by weak intermolecular forces. Diamond suits cutting tools because of its extreme hardness; graphite suits lubricants and pencils because its layers slide and it conducts electricity.",
+                body: "Concrete (SiO2) beats bitumen for roads — its covalent network makes it far harder and higher-melting. Diamond suits cutting tools; graphite suits lubricants, since its layers slide and it conducts.",
               },
             ],
             questions: [
@@ -2758,17 +2970,22 @@ const SUBJECTS = {
               {
                 band: 1,
                 title: "Polymer structure",
-                body: "A polymer is a long chain built from many repeating units called monomers, joined by strong covalent bonds within each chain. Between separate chains, only weak intermolecular forces act (unless cross-links join them).",
+                body: "A polymer is a long chain of repeating monomers, joined by strong covalent bonds.",
                 children: [
                   {
                     band: 2,
+                    title: "Between chains: weak forces",
+                    body: "Only weak forces act between separate polymer chains — unless cross-links join them.",
+                  },
+                  {
+                    band: 2,
                     title: "Why polymers are generally flexible",
-                    body: "The weak intermolecular forces between chains can be overcome relatively easily, letting chains slide past one another so the polymer can bend or be moulded — even though the covalent bonds within each chain stay strong.",
+                    body: "Weak forces between chains let them slide past each other — even though each chain's own bonds are strong.",
                   },
                   {
                     band: 2,
                     title: "Cross-linking and elasticity",
-                    body: "Some polymers have cross-links joining neighbouring chains. When stretched, cross-links limit how far chains move and pull them back toward their original shape, giving elasticity. Stronger, more numerous cross-links increase rigidity, strength, and resistance to heat.",
+                    body: "Cross-links join chains together. When stretched, they pull the chains back — giving elasticity and extra strength.",
                   },
                 ],
               },
@@ -2780,19 +2997,19 @@ const SUBJECTS = {
                   {
                     band: 2,
                     title: "Chain packing affects density and melting point",
-                    body: "Straight, well-aligned chains pack closely, creating more intermolecular contact and requiring more energy to separate — giving higher density and melting point. Branched chains pack less efficiently, leaving more empty space and lowering density and melting point.",
+                    body: "Straight chains pack closely, giving higher density and melting point. Branched chains pack loosely, giving lower density.",
                   },
                   {
                     band: 2,
-                    title: "Chain alignment affects strength under load",
-                    body: "A force applied along the direction of the polymer chains is carried by strong covalent bonds and resists stretching well. A force applied across chains acts mainly on the weak intermolecular forces between them, so the material stretches and tears more easily.",
+                    title: "Chain alignment affects strength",
+                    body: "A pull along the chains is carried by strong covalent bonds. A pull across chains only meets weak forces — and tears more easily.",
                   },
                 ],
               },
               {
                 band: 3,
                 title: "Evaluating polymer design for a use",
-                body: "A polyethylene shopping bag resists tearing better when its chains are aligned with the direction of the load, since the load is then carried along strong covalent bonds rather than across weak intermolecular forces. Increasing cross-linking is a good design choice when a polymer needs to resist melting or softening at high temperature.",
+                body: "A shopping bag resists tearing when its chains align with the load. More cross-linking helps a polymer resist melting at high heat.",
               },
             ],
             questions: [

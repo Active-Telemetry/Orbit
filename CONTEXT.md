@@ -12,8 +12,34 @@ decisions below. Read this before touching `app.jsx`.
 
 ## Current state
 
-- **Version:** 0.7.0 (in `APP_VERSION` in `app.jsx`, and matching
+- **Version:** 0.9.0 (in `APP_VERSION` in `app.jsx`, and matching
   `CACHE_NAME` in `sw.js`)
+- **v0.9.0 tightened the Physical Properties module** (Chemistry) the
+  same way as the v0.8.0 genetics pass below, but content-complete
+  already (no missing concepts vs. the source file this time) — just
+  wordy. All 6 `prop-*` submodules' `learn` facts were split from dense
+  multi-sentence bodies into short, single-idea parent/child facts,
+  questions left untouched. Verified post-edit: average fact body ~17
+  words, longest 32 words — down from ~38 words average and several
+  45–61-word single facts beforehand. Also closed one small pre-existing
+  content gap while in there: added a "metals generally have high
+  melting points" fact to `prop-metallic` (a related question already
+  existed, `prop_q23`, but nothing taught it explicitly).
+- **v0.8.0 expanded and tightened the Genetics & Variation module**
+  (Biology), reviewed against `content/92022_NCEA_L1_CB1.3_Genetics_and_Variation.txt`:
+  added a new `gen-population` submodule (mating patterns, migration,
+  allele frequencies — genuinely missing before, not just thin), added
+  phylogenetic trees to `gen-tracking` and carrier-status/sickle-cell to
+  `gen-basics` (both named as tracking/example concepts in the source
+  but absent from the app), and added 10 new questions (`gen_q17`–`gen_q26`)
+  across all five submodules. Every existing `learn` fact body was also
+  rewritten shorter — multi-sentence, multi-concept bodies were split
+  into separate one-idea facts (parent/child nodes) rather than trimmed
+  in place, since the v0.7.0 Learn-mode stepper now shows one fact per
+  screen and long paragraphs are much more noticeable there than they
+  were in the old accordion. Verified post-edit: average fact body is
+  ~15 words, longest is 26 words (one sentence) — down from several
+  40–50-word, 2–3-sentence bodies beforehand.
 - **v0.7.0 turned Learn mode into an interleaved fact→question
   stepper.** It used to be a static expandable accordion
   (`LearnNode`/`teaser`, both now deleted) showing all of a submodule's
