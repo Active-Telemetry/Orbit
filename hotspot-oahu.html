@@ -161,7 +161,15 @@ const TOPICS = [
     {q:"What makes Hawai'i geographically unique among US states?", opts:["Only state entirely on an archipelago","Only state with no coastline","Only state north of the Arctic Circle","Only landlocked state"], a:0,
      fact:"Hawai'i is the only US state situated entirely on an archipelago."},
     {q:"Which ethnic group is the largest share of Hawaii's population?", opts:["White","Asian","Native Hawaiian / Pacific Islander","Black / African American"], a:1,
-     fact:"Asian residents form the largest group in Hawaii, at roughly 37% of the population."}
+     fact:"Asian residents form the largest group in Hawaii, at roughly 37% of the population."},
+    {q:"Which line of latitude runs directly through the Hawaiian Islands?", opts:["The Equator","The Tropic of Cancer","The Antarctic Circle","The Prime Meridian"], a:1,
+     fact:"Hawai'i sits in the tropics, crossed by the Tropic of Cancer at about 23.5°N."},
+    {q:"Roughly how far is Hawai'i from the US mainland?", opts:["400 km","1,200 km","3,900 km","8,000 km"], a:2,
+     fact:"Hawai'i lies about 3,900 km (2,400 miles) south-west of California, making it one of the most isolated island chains on Earth."},
+    {q:"What term describes Hawaii's mix of many ethnic groups living closely together?", opts:["A melting pot","A monoculture","A salad bowl state","An isolated enclave"], a:0,
+     fact:"Hawai'i is often called a 'melting pot' because of its unusually high level of ethnic diversity and mixing."},
+    {q:"How does O'ahu's population density compare with Hawaii's statewide average?", opts:["Much lower","About the same","Roughly seven times higher","Roughly seven times lower"], a:2,
+     fact:"O'ahu is far more crowded than the state average — around 1,700 people per sq mile versus roughly 225 statewide."}
   ]},
   { id:'leg', name:"Legends of the Islands", short:"Pele & Nāmaka", questions:[
     {q:"Who is the Hawaiian fire goddess linked to forming the islands?", opts:["Nāmaka","Pele","Kanaloa","Hina"], a:1,
@@ -179,7 +187,11 @@ const TOPICS = [
     {q:"Where does Pele reside today, according to the legend?", opts:["Mauna Loa summit","Kīlauea crater","Diamond Head","Haleakalā crater"], a:1,
      fact:"Pele is said to still reside in the crater atop Kīlauea, on Hawai'i island."},
     {q:"Who eventually gave up trying to defeat Pele?", opts:["Kanaloa","Nāmaka","Lono","Kū"], a:1,
-     fact:"Nāmaka came to accept she could not kill or stop her sister, and left her be."}
+     fact:"Nāmaka came to accept she could not kill or stop her sister, and left her be."},
+    {q:"What does the Māori term Kōrero Pūrākau refer to?", opts:["A style of wood carving","A legend or story that explains an event","A ceremonial welcome","A land boundary marker"], a:1,
+     fact:"Kōrero Pūrākau describes a legend or story used to explain an event or activity, like the Pele legend."},
+    {q:"According to Māori tradition, what does pūrākau (storytelling) create, beyond entertainment?", opts:["Legal contracts","Shared meaning and identity","Weather forecasts","Trade agreements"], a:1,
+     fact:"Pūrākau is seen as a way of creating shared meaning and identity, not just passing on stories."}
   ]},
   { id:'geo', name:"Geological History", short:"Hotspots & plates", questions:[
     {q:"Which tectonic plate does the Hawaiian archipelago sit on?", opts:["Pacific Plate","North American Plate","Nazca Plate","Indo-Australian Plate"], a:0,
@@ -197,7 +209,9 @@ const TOPICS = [
     {q:"What forms first as rising magma breaks through the ocean floor?", opts:["An island","A volcano","A seamount","A crater"], a:2,
      fact:"Magma first breaks the surface as a seamount, before building into a volcano then an island."},
     {q:"Besides Hawai'i, where else does the hotspot idea apply?", opts:["The Himalayas","The Cook Islands","The Andes","Iceland only"], a:1,
-     fact:"The hotspot concept also applies to places like the Cook Islands and the Auckland volcanic field."}
+     fact:"The hotspot concept also applies to places like the Cook Islands and the Auckland volcanic field."},
+    {q:"Which Hawai'i island volcano erupted destructively in 2018, destroying hundreds of homes?", opts:["Mauna Loa","Kīlauea","Haleakalā","Hualālai"], a:1,
+     fact:"Kīlauea's 2018 lower Puna eruption destroyed over 700 homes, showing the hotspot's ongoing power."}
   ]},
   { id:'oah', name:"O'ahu Island", short:"Geography of O'ahu", questions:[
     {q:"What is O'ahu's size rank among the Hawaiian islands?", opts:["Largest","Second-largest","Third-largest","Smallest"], a:2,
@@ -215,7 +229,9 @@ const TOPICS = [
     {q:"Which two well-known sites sit on Honolulu's coast?", opts:["Diamond Head & Pearl Harbour","Mount Fuji & Tokyo Bay","Ayers Rock & Sydney Harbour","Neither of these"], a:0,
      fact:"Honolulu is famous for Waikiki beach, Pearl Harbour, and Diamond Head."},
     {q:"What share of Hawai'i's total tourists visit O'ahu?", opts:["About 10%","About 25%","About 50%","About 75%"], a:2,
-     fact:"Nearly 50% of all tourists to Hawai'i visit O'ahu."}
+     fact:"Nearly 50% of all tourists to Hawai'i visit O'ahu."},
+    {q:"Where are most of O'ahu's roads and settlements concentrated?", opts:["Along the coasts and valleys between the two mountain ranges","Only across the central mountain interior","Evenly spread across the whole island","Only on the island's western tip"], a:0,
+     fact:"Settlement and roads cluster along O'ahu's coastline and the valleys between the Wai'anae and Ko'olau ranges."}
   ]},
   { id:'eco', name:"Economy & Tourism", short:"Climate, surf, income", questions:[
     {q:"What are O'ahu's two main seasons?", opts:["Spring & autumn","Wet & dry","Hot & cold","Monsoon & drought"], a:1,
@@ -233,7 +249,11 @@ const TOPICS = [
     {q:"About what share of Hawaii's population is military personnel and dependents?", opts:["2%","8%","15%","25%"], a:1,
      fact:"Military personnel and dependents make up about 8% of Hawaii's population."},
     {q:"Where do most O'ahu tourists stay?", opts:["Waikiki","Pearl Harbour","The North Shore","Diamond Head"], a:0,
-     fact:"Most tourists stay in hotels along Waikiki beach."}
+     fact:"Most tourists stay in hotels along Waikiki beach."},
+    {q:"Roughly what share of Hawaii's economy comes directly and indirectly from tourism?", opts:["Around 5%","Around 17%","Around 40%","Around 65%"], a:1,
+     fact:"Tourism contributes around 17% of Hawaii's GDP, directly and indirectly."},
+    {q:"Alongside tourism, what other major sector props up Hawaii's economy?", opts:["Military and federal spending","Coal mining","Car manufacturing","Commercial fishing exports"], a:0,
+     fact:"Tourism and military/federal spending together make up close to a third of Hawaii's economy."}
   ]},
   { id:'chal', name:"Challenges Facing O'ahu", short:"Housing, traffic, climate", questions:[
     {q:"What is the first of O'ahu's top four problems listed?", opts:["Traffic congestion","Homelessness & housing costs","Climate change","Tourism reliance"], a:1,
@@ -251,7 +271,11 @@ const TOPICS = [
     {q:"What limits new hotel and resort construction on O'ahu?", opts:["Zoning laws","Lack of tourists","Military restrictions only","Volcanic activity"], a:0,
      fact:"Zoning laws prevent new hotels and resorts in many parts of O'ahu."},
     {q:"Which of these is NOT one of O'ahu's top four listed problems?", opts:["Homelessness","Traffic congestion","Overfishing","Reliance on tourism"], a:2,
-     fact:"Overfishing isn't listed — the four are housing, tourism reliance, climate change, and traffic."}
+     fact:"Overfishing isn't listed — the four are housing, tourism reliance, climate change, and traffic."},
+    {q:"How does Hawaii's rate of homelessness compare with other US states?", opts:["Among the lowest in the US","Close to the national average","The highest per capita in the US","Homelessness isn't tracked in Hawaii"], a:2,
+     fact:"Hawaii consistently has the highest rate of homelessness per capita of any US state."},
+    {q:"Despite its small size, how does Honolulu often rank for traffic congestion?", opts:["Among the least congested US cities","Among the most congested US cities","It has no congestion due to few residents","Only congested during hurricanes"], a:1,
+     fact:"Limited roads and island geography mean Honolulu regularly ranks among the most congested US cities."}
   ]},
   { id:'dm', name:"Perspectives & Decision-Making", short:"What the exam actually tests", questions:[
     {q:"What is a \"geographic challenge\", as this standard defines it?", opts:["A map-reading test","A topic, problem or opportunity tied to an environment that people can respond to","A natural disaster only","A population statistic"], a:1,
@@ -273,7 +297,11 @@ const TOPICS = [
     {q:"What viewpoint might a housing advocate hold on O'ahu's zoning laws?", opts:["Zoning should ease to allow more affordable housing","Zoning should stop all development entirely","Zoning is irrelevant to housing","Housing should only be built in flood zones"], a:0,
      fact:"A housing advocate's viewpoint might be that zoning laws should ease to allow more affordable housing."},
     {q:"When a question asks you to \"evaluate the extent to which\" perspectives inform a decision, what is it really asking you to judge?", opts:["Whether the challenge is real","How much weight each perspective actually carried in the decision made","Which stakeholder is correct","How many stakeholders exist"], a:1,
-     fact:"Evaluating means judging how much each perspective or viewpoint actually shaped the decision — not just listing them."}
+     fact:"Evaluating means judging how much each perspective or viewpoint actually shaped the decision — not just listing them."},
+    {q:"Which group's relationship with te taiao centres on growing crops on O'ahu?", opts:["Farmers","Airline pilots","Tourists","Military personnel"], a:0,
+     fact:"Farmers' relationship with te taiao (the environment) is centred on cultivating the land for crops."},
+    {q:"Which of these is commonly raised as a negative impact of tourism in perspectives debates about O'ahu?", opts:["Pressure on housing and infrastructure","Guaranteed elimination of unemployment","No environmental impact at all","Removal of the need for zoning laws"], a:0,
+     fact:"Critics note tourism adds pressure to housing, infrastructure, and the environment, even as it brings in income."}
   ]}
 ];
 
