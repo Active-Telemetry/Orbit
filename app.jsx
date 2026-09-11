@@ -95,12 +95,19 @@ const Lock = (p) => (
     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
   </Icon>
 );
+const ExternalLink = (p) => (
+  <Icon {...p}>
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    <polyline points="15 3 21 3 21 9" />
+    <line x1="10" y1="14" x2="21" y2="3" />
+  </Icon>
+);
 
 /* ---------------------------------------------------------------------- */
 /* App identity                                                           */
 /* ---------------------------------------------------------------------- */
 
-const APP_VERSION = "0.9.0";
+const APP_VERSION = "0.10.0";
 const SCHEMA_VERSION = 2;
 
 /* ---------------------------------------------------------------------- */
@@ -4637,6 +4644,35 @@ const SUBJECTS = {
       },
     ],
   },
+  geography: {
+    id: "geography",
+    name: "Geography",
+    blurb: "Real-world places and processes studied through case studies",
+    accent: "geography",
+    available: true,
+    modules: [
+      {
+        id: "case-studies",
+        name: "Case Studies",
+        blurb: "Linked pages exploring real-world locations, not built into the app",
+        submodules: [
+          {
+            id: "hotspot-oahu",
+            name: "Hotspot Oahu",
+            blurb: "How hotspot volcanism formed the Hawaiian Islands, using O'ahu as the case study",
+            // This submodule has no Learn/Revise content of its own — it's a
+            // link out to a standalone static page (hotspot-oahu.html),
+            // deliberately not integrated into the app. See SubmoduleListScreen,
+            // which checks for `externalUrl` and opens it in a new tab instead
+            // of navigating to the mode-choice screen.
+            externalUrl: "hotspot-oahu.html",
+            learn: [],
+            questions: [],
+          },
+        ],
+      },
+    ],
+  },
 };
 
 /* ---------------------------------------------------------------------- */
@@ -5258,6 +5294,14 @@ function SubmoduleListScreen({
     const s = submoduleBandScore(sm, 1, progress);
     return s !== null && s >= MASTERY_THRESHOLD;
   }).length;
+  // Some submodules are just links out to a standalone page (`externalUrl`)
+  // with no Learn/Revise content of their own - see the row rendering below.
+  // If a module is nothing but those, the progress/mastery header and the
+  // "Revise this whole module" button have nothing to show, so they're
+  // hidden rather than showing a permanently-empty ring and a dead-end button.
+  const hasQuizContent = module.submodules.some(
+    (sm) => !sm.externalUrl && sm.questions.length > 0,
+  );
 
   return (
     <div>
@@ -5267,41 +5311,91 @@ function SubmoduleListScreen({
         onBack={onBack}
         onSettings={onSettings}
       />
-      <div style={{ padding: "4px 20px 8px" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 14,
-            marginBottom: 18,
-          }}
-        >
-          <Ring
-            value={overallScore}
-            size={52}
-            color={`var(--${subject.accent})`}
-          />
-          <div>
-            <div style={{ fontSize: 13, color: "var(--ink-dim)" }}>
-              {masteredCount} of {module.submodules.length} topics mastered
-            </div>
-            <div
-              style={{ fontSize: 12.5, color: "var(--ink-dim)", marginTop: 2 }}
-            >
-              {daysAgo(progress.lastStudied)}
+      {hasQuizContent && (
+        <div style={{ padding: "4px 20px 8px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              marginBottom: 18,
+            }}
+          >
+            <Ring
+              value={overallScore}
+              size={52}
+              color={`var(--${subject.accent})`}
+            />
+            <div>
+              <div style={{ fontSize: 13, color: "var(--ink-dim)" }}>
+                {masteredCount} of {module.submodules.length} topics mastered
+              </div>
+              <div
+                style={{ fontSize: 12.5, color: "var(--ink-dim)", marginTop: 2 }}
+              >
+                {daysAgo(progress.lastStudied)}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       <div
         style={{
-          padding: "0 20px 12px",
+          padding: hasQuizContent ? "0 20px 12px" : "16px 20px 12px",
           display: "flex",
           flexDirection: "column",
           gap: 10,
         }}
       >
         {module.submodules.map((sm, i) => {
+          if (sm.externalUrl) {
+            return (
+              <button
+                key={sm.id}
+                onClick={() =>
+                  window.open(sm.externalUrl, "_blank", "noopener,noreferrer")
+                }
+                style={styles.moduleRow}
+              >
+                <div
+                  style={{
+                    ...styles.submoduleIndex,
+                    background: "var(--surface-raised)",
+                    borderColor: "var(--border)",
+                  }}
+                >
+                  <ExternalLink size={16} color="var(--ink-dim)" />
+                </div>
+                <div style={{ flex: 1, minWidth: 0, textAlign: "left" }}>
+                  <div
+                    style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)" }}
+                  >
+                    {sm.name}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 12.5,
+                      color: "var(--ink-dim)",
+                      marginTop: 3,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {sm.blurb}
+                  </div>
+                </div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: "var(--ink-dim)",
+                    fontFamily: "'IBM Plex Mono', monospace",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Opens in new tab
+                </div>
+              </button>
+            );
+          }
           const achievedScore = submoduleBandScore(sm, 1, progress);
           const mastered =
             achievedScore !== null && achievedScore >= MASTERY_THRESHOLD;
@@ -5389,11 +5483,13 @@ function SubmoduleListScreen({
           );
         })}
       </div>
-      <div style={{ padding: "8px 20px 20px" }}>
-        <button onClick={onReviseAll} style={styles.secondaryBtn}>
-          <Brain size={16} /> Revise this whole module
-        </button>
-      </div>
+      {hasQuizContent && (
+        <div style={{ padding: "8px 20px 20px" }}>
+          <button onClick={onReviseAll} style={styles.secondaryBtn}>
+            <Brain size={16} /> Revise this whole module
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -6566,6 +6662,7 @@ function Orbit() {
         "--chemistry": "#6FB8E8",
         "--physics": "#C6A6F0",
         "--earth": "#F2A65A",
+        "--geography": "#4FC1BA",
         "--correct": "#7FD1A0",
         "--incorrect": "#E8735C",
         "--border": "#2A3644",

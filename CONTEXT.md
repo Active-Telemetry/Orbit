@@ -2,18 +2,50 @@
 
 A study app for NCEA Level 1 (NZ) subjects, built for a specific student.
 Currently: the four NCEA science-strand subjects (Biology, Chemistry,
-Physics, Earth & Space) — see "Current state" for how these used to be
-bundled under a single "Science" subject and were flattened out in
-v0.6.0. Designed so more subjects can be added later without
-restructuring.
+Physics, Earth & Space) plus a fifth, Geography, which so far is just a
+link out to a standalone page (see "Current state" for both this and
+how the four science subjects used to be bundled under a single
+"Science" subject before being flattened out in v0.6.0). Designed so
+more subjects can be added later without restructuring.
 
 This file exists so a new chat can pick up work without re-deriving the
 decisions below. Read this before touching `app.jsx`.
 
 ## Current state
 
-- **Version:** 0.9.0 (in `APP_VERSION` in `app.jsx`, and matching
+- **Version:** 0.10.0 (in `APP_VERSION` in `app.jsx`, and matching
   `CACHE_NAME` in `sw.js`)
+- **v0.10.0 added a fifth subject, Geography**, and with it a new
+  **`externalUrl` submodule pattern** for content that's deliberately
+  NOT integrated into the app — just linked out to a standalone static
+  page. `SUBJECTS.geography` has one module (`case-studies`) with one
+  submodule (`hotspot-oahu`, id matches the uploaded `hotspot-oahu.html`
+  at the repo root) that carries `externalUrl: "hotspot-oahu.html"`
+  alongside empty `learn: []`/`questions: []` arrays (kept as empty
+  arrays rather than omitted, since `submoduleBandScore` etc. call
+  `.filter` on `submodule.questions` unconditionally).
+  - `SubmoduleListScreen` checks `sm.externalUrl` per row: if set, the
+    row calls `window.open(url, "_blank", "noopener,noreferrer")`
+    instead of `onOpenSubmodule` (so it never enters the Learn/Revise
+    flow at all), and renders an `ExternalLink` icon + "Opens in new
+    tab" hint instead of the mastery checkmark/index number and the
+    three per-band score rings (which would otherwise always read
+    empty, since there's no quiz content to score).
+  - A new `hasQuizContent` check (`module.submodules.some(sm =>
+    !sm.externalUrl && sm.questions.length > 0)`) hides the ring/"N of M
+    topics mastered" header and the "Revise this whole module" button
+    entirely when a module has nothing scorable — otherwise Revise
+    would open on an empty, permanently-disabled question pool. This is
+    generic (works for any future link-only module), not hardcoded to
+    Geography specifically.
+  - Added a new `--geography` CSS accent var (teal, `#4FC1BA`) alongside
+    the existing per-subject colours, and a new hand-rolled
+    `ExternalLink` icon next to the other inline icons near the top of
+    `app.jsx`.
+  - `hotspot-oahu.html` added to `sw.js`'s `APP_SHELL` precache list so
+    it works offline too, same as the rest of the app shell.
+  - Nothing about the existing subject/module/submodule/progress
+    plumbing changed for the four science subjects — this is additive.
 - **v0.9.0 tightened the Physical Properties module** (Chemistry) the
   same way as the v0.8.0 genetics pass below, but content-complete
   already (no missing concepts vs. the source file this time) — just
