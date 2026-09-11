@@ -13,8 +13,81 @@ decisions below. Read this before touching `app.jsx`.
 
 ## Current state
 
-- **Version:** 0.10.0 (in `APP_VERSION` in `app.jsx`, and matching
+- **Version:** 0.11.0 (in `APP_VERSION` in `app.jsx`, and matching
   `CACHE_NAME` in `sw.js`)
+- **v0.11.0 fixed a real bug in the v0.7.0 Learn stepper: a fact could
+  be paired with a question that tests a concept the *next* fact hasn't
+  taught yet.** Reported by the user against `gen-basics`'s first fact
+  (which had 2 attached questions; the 2nd asked for "allele", a term
+  only defined in that fact's own band-2 *child*, not shown until the
+  Merit tab). Root cause: `buildLearnSteps` pairs a band's facts with
+  that band's questions purely by **position** (see `distributeQuestions`
+  below `bandOf` in `app.jsx`) — it has no idea what a fact actually
+  *teaches* or a question actually *tests*. This is fine as long as
+  every band-N question's concept is actually covered by a band-≤N fact.
+  It had quietly stopped being true in several places after the v0.8.0/
+  v0.9.0 genetics and physical-properties passes, because splitting one
+  wordy fact into a short parent + short children (for the "concise
+  facts" pass) sometimes pushed the specific vocab a band-1 QUESTION
+  needed down into a band-2 CHILD, or scrambled the fact/question array
+  order enough that positional pairing landed on the wrong topic.
+  - **The fix is always in the content, never in the algorithm.**
+    `distributeQuestions`'s even-split-by-position behaviour is correct
+    and was left alone; every fix here was one of: (a) **re-banding** —
+    flip a child fact's `band` from 2 to 1 when a band-1 question
+    depends on it (e.g. `gen-basics`'s "Alleles are versions of a gene"
+    and "Chromosomes carry genes" children; `prop-network`'s "Diamond: a
+    3D network"/"Graphite: 2D layers" bond-count children), (b)
+    **reordering** facts and/or the `questions` array so the position-based
+    pairing lines up with which fact actually teaches which question
+    (`prop-metallic`, `prop-molecular` needed both facts AND questions
+    reordered — tracked by hand against `distributeQuestions`'s
+    `ceil(i·Q/F)` formula), or (c) **adding a missing fact** where a
+    question tested a concept that was never taught at all, not even in
+    a wrong band (`prop-ionic` had dropped the terms "cation"/"anion"
+    and never defined "electrolyte"; `prop-molecular` never stated
+    molecular substances have low melting/boiling points as a plain
+    band-1 observation, only the band-2 "why"; `prop-polymers` never
+    said polymers are poor electrical conductors at all).
+  - **A generally useful pattern found while fixing this:** a
+    content-free "intro" parent fact with no question of its own,
+    placed before children that DO have matching questions, always
+    steals the first one — `distributeQuestions` fills front-to-back, so
+    the empty wrapper "wins" the slot meant for its first real child.
+    (`gen-tracking`'s old "Tracking inheritance" wrapper did this to
+    "Punnett squares"; fixed by deleting the wrapper and promoting each
+    tool to its own top-level band-1 fact.) Avoid these wrappers, or
+    give them their own question, when authoring new content.
+  - **Verification method:** dumped `SUBJECTS` to JSON, re-implemented
+    `collectFactsByBand`/`distributeQuestions`/`buildLearnSteps` in a
+    throwaway Node script, and printed the exact fact→question step
+    sequence `LearnScreen` would produce for every genetics and
+    physical-properties submodule at `maxBand: 3` — this is the
+    reliable way to check this, not eyeballing the JSX. A cheap
+    heuristic (does a normalized substring of the question's answer
+    appear anywhere in the cumulative fact text up to that band?) is
+    useful for a first pass but has both false positives (distractor
+    options, paraphrased answers) and false negatives (a term used
+    in passing without being formally taught) — don't trust it alone,
+    always eyeball the actual step sequence for anything it flags **and**
+    anything semantically adjacent to what a user reports.
+  - **Known gap, not yet fixed:** this same class of bug likely also
+    exists in the biology/chemistry/physics/earthspace content that
+    predates the Learn stepper (cells, ecology, atoms, reactions,
+    forces, energy, earthsystems, solarsystem) — those submodules were
+    authored back when Learn was a static accordion and Revise was a
+    fully decoupled quiz, so nothing ever required a question's concept
+    to be taught by a specific, earlier fact. The same heuristic script
+    flagged ~70 more candidates across those modules when run
+    unscoped; none were fixed as part of this pass (out of scope — the
+    user's report was about genetics specifically, and physical-properties
+    was fixed because the same recent editing pass caused it). Worth a
+    dedicated pass later, ideally re-using the dump-to-JSON +
+    `buildLearnSteps` simulation approach above rather than manual
+    tracing, which is extremely easy to get wrong by hand once a
+    submodule has more than 2-3 facts (see the `prop-metallic`/
+    `prop-molecular` fixes above, which needed multiple rounds of
+    simulated tracing to get the ordering right).
 - **v0.10.0 added a fifth subject, Geography**, and with it a new
   **`externalUrl` submodule pattern** for content that's deliberately
   NOT integrated into the app — just linked out to a standalone static

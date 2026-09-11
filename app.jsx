@@ -107,7 +107,7 @@ const ExternalLink = (p) => (
 /* App identity                                                           */
 /* ---------------------------------------------------------------------- */
 
-const APP_VERSION = "0.10.0";
+const APP_VERSION = "0.11.0";
 const SCHEMA_VERSION = 2;
 
 /* ---------------------------------------------------------------------- */
@@ -1061,12 +1061,12 @@ const SUBJECTS = {
                 body: "A gene is a section of DNA that codes for one trait.",
                 children: [
                   {
-                    band: 2,
+                    band: 1,
                     title: "Alleles are versions of a gene",
                     body: "An allele is a different version of the same gene — different alleles create different traits.",
                   },
                   {
-                    band: 2,
+                    band: 1,
                     title: "Chromosomes carry genes",
                     body: "A chromosome is a structure that carries many genes together.",
                   },
@@ -1112,19 +1112,19 @@ const SUBJECTS = {
                 answers: ["allele", "alleles"],
               },
               {
+                id: "gen_q17",
+                band: 1,
+                type: "text",
+                prompt: "What structure carries many genes together?",
+                answers: ["chromosome", "chromosomes"],
+              },
+              {
                 id: "gen_q3",
                 band: 1,
                 type: "mcq",
                 prompt: "What is the observable physical expression of a genotype called?",
                 options: ["Genotype", "Chromosome", "Phenotype", "Mutation"],
                 answer: "Phenotype",
-              },
-              {
-                id: "gen_q17",
-                band: 1,
-                type: "text",
-                prompt: "What structure carries many genes together?",
-                answers: ["chromosome", "chromosomes"],
               },
               {
                 id: "gen_q4",
@@ -1173,7 +1173,7 @@ const SUBJECTS = {
                 body: "A mutation is a permanent change in the DNA base sequence.",
                 children: [
                   {
-                    band: 2,
+                    band: 1,
                     title: "Mutations create new alleles",
                     body: "Mutations are the ultimate source of every new allele in a population.",
                   },
@@ -1268,30 +1268,23 @@ const SUBJECTS = {
             learn: [
               {
                 band: 1,
-                title: "Tracking inheritance",
-                body: "Scientists use several tools to track how alleles pass through families and populations.",
-                children: [
-                  {
-                    band: 2,
-                    title: "Punnett squares",
-                    body: "A Punnett square predicts the probability of offspring genotypes from a cross.",
-                  },
-                  {
-                    band: 2,
-                    title: "Pedigree charts",
-                    body: "A pedigree chart maps how a trait has passed through generations of a family.",
-                  },
-                  {
-                    band: 2,
-                    title: "DNA sequencing",
-                    body: "DNA sequencing reads the exact base sequence to identify genetic markers.",
-                  },
-                  {
-                    band: 2,
-                    title: "Phylogenetic trees",
-                    body: "A phylogenetic tree shows how closely related species or individuals are, based on genetic similarity.",
-                  },
-                ],
+                title: "Punnett squares",
+                body: "A Punnett square predicts the probability of offspring genotypes from a cross.",
+              },
+              {
+                band: 1,
+                title: "Pedigree charts",
+                body: "A pedigree chart maps how a trait has passed through generations of a family.",
+              },
+              {
+                band: 2,
+                title: "DNA sequencing",
+                body: "DNA sequencing reads the exact base sequence to identify genetic markers.",
+              },
+              {
+                band: 1,
+                title: "Phylogenetic trees",
+                body: "A phylogenetic tree shows how closely related species or individuals are, based on genetic similarity.",
               },
               {
                 band: 3,
@@ -1362,12 +1355,7 @@ const SUBJECTS = {
                 body: "More genetic variation in a population means better adaptability and a higher chance of survival.",
                 children: [
                   {
-                    band: 2,
-                    title: "Mating patterns",
-                    body: "Who breeds with whom affects which alleles get passed on to the next generation.",
-                  },
-                  {
-                    band: 2,
+                    band: 1,
                     title: "Migration",
                     body: "Individuals moving between populations mix their allele pools together.",
                   },
@@ -1375,6 +1363,11 @@ const SUBJECTS = {
                     band: 2,
                     title: "Allele frequencies",
                     body: "How common each allele is within a population can shift over time.",
+                  },
+                  {
+                    band: 2,
+                    title: "Mating patterns",
+                    body: "Who breeds with whom affects which alleles get passed on to the next generation.",
                   },
                 ],
               },
@@ -1436,7 +1429,7 @@ const SUBJECTS = {
               {
                 band: 1,
                 title: "The CCR5 gene and viral resistance",
-                body: "A mutant CCR5 allele changes a receptor on white blood cells, giving natural resistance to HIV.",
+                body: "HIV normally enters white blood cells through the CCR5 receptor. A mutant CCR5 allele changes that receptor, giving natural resistance.",
                 children: [
                   {
                     band: 2,
@@ -2405,17 +2398,17 @@ const SUBJECTS = {
               {
                 band: 1,
                 title: "Ionic structure and bonding",
-                body: "Ionic solids are a giant 3D lattice of positive and negative ions, held by strong electrostatic attraction.",
+                body: "Ionic solids are a giant 3D lattice of cations (positive ions) and anions (negative ions), held by strong electrostatic attraction.",
                 children: [
-                  {
-                    band: 2,
-                    title: "Not molecules",
-                    body: "NaCl is a lattice of ions, never separate NaCl molecules.",
-                  },
                   {
                     band: 2,
                     title: "Why ionic solids have high melting points",
                     body: "Strong ion attractions need lots of energy to break — giving ionic solids like NaCl a high melting point (~801°C).",
+                  },
+                  {
+                    band: 2,
+                    title: "Not molecules",
+                    body: "NaCl is a lattice of ions, never separate NaCl molecules.",
                   },
                   {
                     band: 2,
@@ -2433,6 +2426,11 @@ const SUBJECTS = {
                     band: 2,
                     title: "Conductivity depends on ion mobility",
                     body: "Ions are fixed in a solid, so they can't carry charge. Melting or dissolving frees them to move.",
+                  },
+                  {
+                    band: 2,
+                    title: "Electrolytes",
+                    body: "A solution or molten substance with mobile ions that conducts electricity is called an electrolyte.",
                   },
                   {
                     band: 2,
@@ -2549,9 +2547,26 @@ const SUBJECTS = {
             learn: [
               {
                 band: 1,
+                title: "Alloys",
+                body: "An alloy is a metal mixed with other elements — like brass (copper + zinc) or steel (iron + carbon).",
+                children: [
+                  {
+                    band: 2,
+                    title: "Why alloys are harder than pure metals",
+                    body: "Different-sized atoms distort the lattice, so layers can't slide as easily — making alloys harder but less malleable.",
+                  },
+                ],
+              },
+              {
+                band: 1,
                 title: "Metallic structure and bonding",
                 body: "Metals are a lattice of positive metal ions surrounded by a 'sea' of delocalised electrons.",
                 children: [
+                  {
+                    band: 1,
+                    title: "Metals are malleable and ductile",
+                    body: "Non-directional bonds let layers of atoms slide without breaking — so metals bend or draw into wire instead of shattering.",
+                  },
                   {
                     band: 2,
                     title: "Metallic bonds are non-directional",
@@ -2564,25 +2579,8 @@ const SUBJECTS = {
                   },
                   {
                     band: 2,
-                    title: "Metals are malleable and ductile",
-                    body: "Non-directional bonds let layers of atoms slide without breaking — so metals bend or draw into wire instead of shattering.",
-                  },
-                  {
-                    band: 2,
                     title: "Metals generally have high melting points",
                     body: "Strong metallic bonding throughout the lattice means metals generally have high melting points too.",
-                  },
-                ],
-              },
-              {
-                band: 1,
-                title: "Alloys",
-                body: "An alloy is a metal mixed with other elements — like brass (copper + zinc) or steel (iron + carbon).",
-                children: [
-                  {
-                    band: 2,
-                    title: "Why alloys are harder than pure metals",
-                    body: "Different-sized atoms distort the lattice, so layers can't slide as easily — making alloys harder but less malleable.",
                   },
                 ],
               },
@@ -2593,6 +2591,13 @@ const SUBJECTS = {
               },
             ],
             questions: [
+              {
+                id: "prop_q17",
+                band: 1,
+                type: "text",
+                prompt: "What is the term for a mixture of a metal with one or more other elements?",
+                answers: ["alloy", "alloys"],
+              },
               {
                 id: "prop_q16",
                 band: 1,
@@ -2607,13 +2612,6 @@ const SUBJECTS = {
                 answer: "Positive metal ions in a lattice, surrounded by a sea of delocalised electrons",
               },
               {
-                id: "prop_q17",
-                band: 1,
-                type: "text",
-                prompt: "What is the term for a mixture of a metal with one or more other elements?",
-                answers: ["alloy", "alloys"],
-              },
-              {
                 id: "prop_q18",
                 band: 1,
                 type: "mcq",
@@ -2622,17 +2620,17 @@ const SUBJECTS = {
                 answer: "Ductility",
               },
               {
-                id: "prop_q19",
+                id: "prop_q21",
                 band: 2,
                 type: "mcq",
-                prompt: "Why are metals excellent electrical conductors?",
+                prompt: "Why are alloys generally harder and less ductile than the pure metal they're made from?",
                 options: [
-                  "Delocalised electrons are free to move through the structure and carry charge",
-                  "Metal ions themselves move freely to carry charge",
-                  "Metallic bonds are directional, forcing current one way",
-                  "Metals contain mobile anions",
+                  "Different-sized atoms distort the regular lattice, so layers cannot slide past each other as easily",
+                  "Alloys contain covalent bonds instead of metallic bonds",
+                  "Alloys have no delocalised electrons",
+                  "Alloys are always ionic compounds",
                 ],
-                answer: "Delocalised electrons are free to move through the structure and carry charge",
+                answer: "Different-sized atoms distort the regular lattice, so layers cannot slide past each other as easily",
               },
               {
                 id: "prop_q20",
@@ -2648,17 +2646,17 @@ const SUBJECTS = {
                 answer: "Metallic bonds are non-directional, so layers of ions can slide while the delocalised electrons continue to attract them",
               },
               {
-                id: "prop_q21",
+                id: "prop_q19",
                 band: 2,
                 type: "mcq",
-                prompt: "Why are alloys generally harder and less ductile than the pure metal they're made from?",
+                prompt: "Why are metals excellent electrical conductors?",
                 options: [
-                  "Different-sized atoms distort the regular lattice, so layers cannot slide past each other as easily",
-                  "Alloys contain covalent bonds instead of metallic bonds",
-                  "Alloys have no delocalised electrons",
-                  "Alloys are always ionic compounds",
+                  "Delocalised electrons are free to move through the structure and carry charge",
+                  "Metal ions themselves move freely to carry charge",
+                  "Metallic bonds are directional, forcing current one way",
+                  "Metals contain mobile anions",
                 ],
-                answer: "Different-sized atoms distort the regular lattice, so layers cannot slide past each other as easily",
+                answer: "Delocalised electrons are free to move through the structure and carry charge",
               },
               {
                 id: "prop_q22",
@@ -2700,13 +2698,20 @@ const SUBJECTS = {
                 children: [
                   {
                     band: 2,
-                    title: "Why molecular substances have low melting points",
-                    body: "Melting only breaks the weak forces between molecules, not the strong bonds within — so melting points are low.",
-                  },
-                  {
-                    band: 2,
                     title: "Why they don't conduct electricity",
                     body: "Electrons are locked inside each molecule's covalent bonds — there's no mobile charge to carry current.",
+                  },
+                ],
+              },
+              {
+                band: 1,
+                title: "Low melting and boiling points",
+                body: "Molecular substances generally have low melting and boiling points.",
+                children: [
+                  {
+                    band: 2,
+                    title: "Why molecular substances have low melting points",
+                    body: "Melting only breaks the weak forces between molecules, not the strong bonds within — so melting points are low.",
                   },
                 ],
               },
@@ -2748,13 +2753,6 @@ const SUBJECTS = {
                 answer: "Discrete molecules held together within by strong covalent bonds, and between by weak intermolecular forces",
               },
               {
-                id: "prop_q25",
-                band: 1,
-                type: "text",
-                prompt: "What term describes forces that act BETWEEN molecules, rather than within them?",
-                answers: ["intermolecular", "intermolecular forces"],
-              },
-              {
                 id: "prop_q26",
                 band: 1,
                 type: "mcq",
@@ -2766,6 +2764,26 @@ const SUBJECTS = {
                   "High density in every case",
                 ],
                 answer: "Low melting and boiling points",
+              },
+              {
+                id: "prop_q25",
+                band: 1,
+                type: "text",
+                prompt: "What term describes forces that act BETWEEN molecules, rather than within them?",
+                answers: ["intermolecular", "intermolecular forces"],
+              },
+              {
+                id: "prop_q29",
+                band: 2,
+                type: "mcq",
+                prompt: "Why are molecular substances generally poor electrical conductors?",
+                options: [
+                  "Electrons are held within covalent bonds inside each molecule, so there are no mobile ions or delocalised electrons to carry charge",
+                  "Molecular substances contain too many delocalised electrons",
+                  "Their intermolecular forces carry electrical charge instead",
+                  "They are always ionic when dissolved in water",
+                ],
+                answer: "Electrons are held within covalent bonds inside each molecule, so there are no mobile ions or delocalised electrons to carry charge",
               },
               {
                 id: "prop_q27",
@@ -2792,19 +2810,6 @@ const SUBJECTS = {
                   "It forms a rigid ionic lattice that decomposes readily",
                 ],
                 answer: "Weak intermolecular forces mean only a small amount of energy is needed for molecules to escape the liquid and evaporate",
-              },
-              {
-                id: "prop_q29",
-                band: 2,
-                type: "mcq",
-                prompt: "Why are molecular substances generally poor electrical conductors?",
-                options: [
-                  "Electrons are held within covalent bonds inside each molecule, so there are no mobile ions or delocalised electrons to carry charge",
-                  "Molecular substances contain too many delocalised electrons",
-                  "Their intermolecular forces carry electrical charge instead",
-                  "They are always ionic when dissolved in water",
-                ],
-                answer: "Electrons are held within covalent bonds inside each molecule, so there are no mobile ions or delocalised electrons to carry charge",
               },
               {
                 id: "prop_q30",
@@ -2841,30 +2846,32 @@ const SUBJECTS = {
             learn: [
               {
                 band: 1,
-                title: "Diamond and graphite: two forms of carbon",
-                body: "Diamond and graphite are both pure carbon — just arranged differently.",
+                title: "Diamond: a 3D network",
+                body: "Diamond and graphite are both pure carbon. In diamond, each carbon bonds to 4 others in a rigid 3D network.",
                 children: [
-                  {
-                    band: 2,
-                    title: "Diamond: a 3D network",
-                    body: "Each carbon atom bonds to 4 others in a rigid 3D network.",
-                  },
-                  {
-                    band: 2,
-                    title: "Graphite: 2D layers",
-                    body: "Each carbon atom bonds to 3 others in flat layers, leaving one electron free.",
-                  },
                   {
                     band: 2,
                     title: "Why diamond is extremely hard and doesn't conduct",
                     body: "Strong bonds throughout the network make diamond extremely hard. All its electrons are locked in bonds, so it can't conduct.",
                   },
+                ],
+              },
+              {
+                band: 1,
+                title: "Graphite: 2D layers",
+                body: "In graphite, each carbon bonds to only 3 others, arranged in flat layers.",
+                children: [
                   {
                     band: 2,
                     title: "Why graphite is soft and conducts",
                     body: "Weak forces between layers let them slide — making graphite soft. Its free electrons let it conduct electricity.",
                   },
                 ],
+              },
+              {
+                band: 1,
+                title: "Graphite conducts electricity",
+                body: "Graphite's spare electron (one per carbon) moves freely through the layers, unlike diamond.",
               },
               {
                 band: 1,
@@ -2977,13 +2984,8 @@ const SUBJECTS = {
               {
                 band: 1,
                 title: "Polymer structure",
-                body: "A polymer is a long chain of repeating monomers, joined by strong covalent bonds.",
+                body: "A polymer is a long chain built from many repeating monomer units, joined by strong covalent bonds.",
                 children: [
-                  {
-                    band: 2,
-                    title: "Between chains: weak forces",
-                    body: "Only weak forces act between separate polymer chains — unless cross-links join them.",
-                  },
                   {
                     band: 2,
                     title: "Why polymers are generally flexible",
@@ -2994,7 +2996,22 @@ const SUBJECTS = {
                     title: "Cross-linking and elasticity",
                     body: "Cross-links join chains together. When stretched, they pull the chains back — giving elasticity and extra strength.",
                   },
+                  {
+                    band: 2,
+                    title: "Between chains: weak forces",
+                    body: "Only weak forces act between separate polymer chains — unless cross-links join them.",
+                  },
                 ],
+              },
+              {
+                band: 1,
+                title: "Monomers",
+                body: "A monomer is the small repeating unit that a polymer chain is built from.",
+              },
+              {
+                band: 1,
+                title: "Polymers and electricity",
+                body: "Polymers are generally poor electrical conductors.",
               },
               {
                 band: 1,
