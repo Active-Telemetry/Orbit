@@ -992,6 +992,286 @@ const SUBJECTS = {
               },
             ],
           },
+          {
+            id: "genetics",
+            name: "Genetics & Variation",
+            blurb: "DNA, mutations, inheritance, and how genetic diversity shapes populations",
+            submodules: [
+              {
+                id: "gen-basics",
+                name: "Genes, Alleles & Phenotypes",
+                blurb: "The relationship between DNA, alleles, genotypes, and physical traits",
+                learn: [
+                  {
+                    band: 1,
+                    title: "DNA carries genetic information",
+                    body: "Genes are specific sections of DNA that code for traits. Chromosomes are structures that carry many genes. Different versions of the same gene are called alleles, which are responsible for variations in traits.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Genotype vs Phenotype",
+                        body: "Genotype is the allele combination an organism has for a gene (its genetic makeup). Phenotype is the observable physical expression of that genotype. Genotype determines phenotype.",
+                      },
+                      {
+                        band: 2,
+                        title: "Homozygous vs Heterozygous",
+                        body: "Homozygous means having two identical alleles for a gene (either both dominant or both recessive). Heterozygous means having two different alleles for a gene.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 3,
+                    title: "How genotype complexity influences disease expression",
+                    body: "An organism's phenotype isn't always a simple one-to-one mirror of its genotype — environmental factors can interact with genetic predispositions, and carrier states in heterozygous individuals mean recessive alleles can be hidden across generations without being physically expressed.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "gen_q1",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "What is a specific section of DNA that codes for a trait called?",
+                    options: ["An allele", "A gene", "A chromosome", "A phenotype"],
+                    answer: "A gene",
+                  },
+                  {
+                    id: "gen_q2",
+                    band: 1,
+                    type: "text",
+                    prompt: "What term describes alternative forms of the same gene?",
+                    answers: ["allele", "alleles"],
+                  },
+                  {
+                    id: "gen_q3",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "What is the observable physical expression of a genotype called?",
+                    options: ["Genotype", "Chromosome", "Phenotype", "Mutation"],
+                    answer: "Phenotype",
+                  },
+                  {
+                    id: "gen_q4",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "An individual with two different alleles for a specific gene is described as:",
+                    options: ["Homozygous dominant", "Homozygous recessive", "Heterozygous", "Mutated"],
+                    answer: "Heterozygous",
+                  },
+                  {
+                    id: "gen_q5",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "Why can a recessive allele remain present in a population across generations without being expressed in every individual who carries it?",
+                    options: [
+                      "Recessive alleles always destroy themselves over time",
+                      "Heterozygous individuals carry the allele safely while expressing the dominant phenotype",
+                      "Recessive alleles automatically mutate into dominant ones",
+                      "Only homozygous individuals can ever pass on DNA",
+                    ],
+                    answer: "Heterozygous individuals carry the allele safely while expressing the dominant phenotype",
+                  },
+                ],
+              },
+              {
+                id: "gen-variation",
+                name: "Mutation & Meiosis",
+                blurb: "How genetic variation arises through mutation and sexual reproduction",
+                learn: [
+                  {
+                    band: 1,
+                    title: "Sources of genetic variation",
+                    body: "Genetic variation within a population is essential for adaptability and survival. It is driven primarily by mutations and sexual reproduction.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Mutation",
+                        body: "A permanent change in the DNA base sequence. Mutations are the ultimate source of all new alleles.",
+                      },
+                      {
+                        band: 2,
+                        title: "Meiosis and sexual reproduction",
+                        body: "Meiosis generates genetic diversity through crossing over, independent assortment, and random fertilisation, creating new allele combinations in offspring.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 3,
+                    title: "Why genetic variation matters for populations",
+                    body: "Greater genetic variation enhances a species' survival potential under environmental change, by increasing the statistical likelihood that some individuals carry beneficial alleles capable of surviving novel pressures like diseases or climate shifts.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "gen_q6",
+                    band: 1,
+                    type: "text",
+                    prompt: "What term describes a permanent change in the DNA base sequence?",
+                    answers: ["mutation", "mutations"],
+                  },
+                  {
+                    id: "gen_q7",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "What is the ultimate source of all new alleles in a population?",
+                    options: ["Mitosis", "Mutation", "Digestion", "Respiration"],
+                    answer: "Mutation",
+                  },
+                  {
+                    id: "gen_q8",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Which meiosis process involves the exchange of genetic material between homologous chromosomes?",
+                    options: ["Independent assortment", "Crossing over", "Random fertilisation", "Binary fission"],
+                    answer: "Crossing over",
+                  },
+                  {
+                    id: "gen_q9",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "How does high genetic variation directly protect a population against sudden environmental changes?",
+                    options: [
+                      "It stops individuals from ever getting sick",
+                      "It increases the chance that some individuals possess alleles suited to survive the new conditions",
+                      "It forces all individuals to adapt identically",
+                      "It reduces competition for food resources",
+                    ],
+                    answer: "It increases the chance that some individuals possess alleles suited to survive the new conditions",
+                  },
+                ],
+              },
+              {
+                id: "gen-tracking",
+                name: "Inheritance & Gene Tracking",
+                blurb: "Using Punnett squares, pedigrees, and DNA tracking to study inheritance",
+                learn: [
+                  {
+                    band: 1,
+                    title: "Tracking genetic relationships",
+                    body: "Scientists use various tools to identify, follow, and predict alleles and genetic relationships within families and populations.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Punnett squares and pedigree charts",
+                        body: "Punnett squares calculate the probability of offspring inheriting specific genotypes, while pedigree charts map inheritance patterns across family generations.",
+                      },
+                      {
+                        band: 2,
+                        title: "DNA sequencing",
+                        body: "Directly reading DNA base sequences allows scientists to identify genetic markers and measure relatedness between individuals or species.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 3,
+                    title: "Limitations of predictive tracking models",
+                    body: "While Punnett squares give exact statistical probabilities, real-world inheritance can be complicated by linked genes, multiple alleles, and environmental influences that skew expected Mendelian ratios in large populations.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "gen_q10",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "What tool is commonly used to predict the probability of offspring inheriting particular genotypes?",
+                    options: ["Pedigree chart", "Punnett square", "Microscope", "Phylogenetic tree"],
+                    answer: "Punnett square",
+                  },
+                  {
+                    id: "gen_q11",
+                    band: 1,
+                    type: "text",
+                    prompt: "What chart maps inheritance patterns across multiple family generations?",
+                    answers: ["pedigree chart", "pedigree", "family tree"],
+                  },
+                  {
+                    id: "gen_q12",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "What does DNA sequencing allow scientists to do?",
+                    options: [
+                      "Change an organism's phenotype instantly",
+                      "Identify genetic markers and compare base sequences",
+                      "Prevent all mutations from occurring",
+                      "Convert genotypes directly into proteins without transcription",
+                    ],
+                    answer: "Identify genetic markers and compare base sequences",
+                  },
+                  {
+                    id: "gen_q13",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "Why might real-world population inheritance patterns differ from simple Punnett square predictions?",
+                    options: [
+                      "Punnett squares only work for plants",
+                      "Factors like linked genes, multiple alleles, and complex inheritance can alter expected ratios",
+                      "DNA sequencing prevents inheritance calculations",
+                      "Alleles change randomly every hour",
+                    ],
+                    answer: "Factors like linked genes, multiple alleles, and complex inheritance can alter expected ratios",
+                  },
+                ],
+              },
+              {
+                id: "gen-ccr5",
+                name: "Applied Context: CCR5 & HIV Resistance",
+                blurb: "Real-world application of genetics to medical research and viral resistance",
+                learn: [
+                  {
+                    band: 1,
+                    title: "The CCR5 gene and viral resistance",
+                    body: "A specific variation in the CCR5 gene produces a mutant allele that alters a receptor protein on white blood cells, conferring natural resistance to HIV infection.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Genotypes in the CCR5 context",
+                        body: "Individuals homozygous for the mutant allele (hh) are resistant to HIV, whereas susceptible individuals are heterozygous or homozygous for the normal allele (Hh or HH).",
+                      },
+                      {
+                        band: 2,
+                        title: "Medical applications",
+                        body: "Understanding such genetic variations helps researchers develop targeted drug therapies and improve healthcare equity by tailoring treatments.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 3,
+                    title: "Broader implications of genetic discovery",
+                    body: "Discoveries like the CCR5 mutation demonstrate how basic genetics research directly translates into novel antiviral strategies, though equitable global access to resulting therapies remains a significant societal challenge.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "gen_q14",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "What does the mutant allele of the CCR5 gene alter in the body?",
+                    options: ["Red blood cell shape", "A white blood cell receptor protein", "Enzyme production in the liver", "Digestive acid levels"],
+                    answer: "A white blood cell receptor protein",
+                  },
+                  {
+                    id: "gen_q15",
+                    band: 2,
+                    type: "text",
+                    prompt: "What genotype (using 'h' for the mutant allele) describes individuals who are resistant to HIV infection?",
+                    answers: ["hh", "homozygous recessive"],
+                  },
+                  {
+                    id: "gen_q16",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "How does studying genetic variations like the CCR5 mutation benefit modern medicine?",
+                    options: [
+                      "It allows scientists to eliminate all viruses instantly",
+                      "It supports the development of targeted treatments and preventative drug therapies",
+                      "It proves that genotypes never determine phenotypes",
+                      "It replaces the need for clinical trials",
+                    ],
+                    answer: "It supports the development of targeted treatments and preventative drug therapies",
+                  },
+                ],
+              },
+            ],
+          },
         ],
       },
       {
