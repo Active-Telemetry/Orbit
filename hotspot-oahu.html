@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotspot — O'ahu & the Hawaiian Islands</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+  --ocean-deep:#0A2A43;
+  --ocean-mid:#12446B;
+  --ocean-surface:#1C6E8C;
+  --basalt:#1B1512;
+  --basalt-light:#3B2E29;
+  --lava:#E8552E;
+  --lava-light:#FF8552;
+  --gold:#F2B33D;
+  --foam:#F4F7F6;
+  --foam-dim:#B9CBCE;
+  --green-canopy:#3F7D5C;
+  --green-light:#7FBE93;
+  --wrong:#D64545;
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background: radial-gradient(circle at 20% 0%, #123651 0%, var(--basalt) 70%);
+  color:var(--foam);
+  font-family:'Space Grotesk', sans-serif;
+  min-height:100vh;
+}
+.wrap{max-width:720px;margin:0 auto;padding:20px 18px 60px;}
+
+/* ---------- header ---------- */
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;gap:10px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:11px;}
+.logo-dot{width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle at 35% 30%, var(--gold) 0%, var(--lava) 55%, var(--basalt) 100%);
+  box-shadow:0 0 14px rgba(232,85,46,0.45);}
+.brand .mark{font-family:'Fraunces',serif;font-weight:700;font-size:23px;letter-spacing:0.3px;color:var(--foam);line-height:1.1;}
+.brand .mark span{color:var(--lava-light);}
+.brand .sub{font-size:12px;color:var(--foam-dim);margin-top:2px;}
+.reset-btn{background:none;border:1px solid rgba(244,247,246,0.2);color:var(--foam-dim);font-family:inherit;
+  font-size:12px;padding:7px 12px;border-radius:20px;cursor:pointer;transition:.15s;}
+.reset-btn:hover{border-color:var(--lava);color:var(--foam);}
+
+/* ---------- mode tabs ---------- */
+.tabs{display:flex;gap:4px;margin-bottom:26px;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:4px;}
+.tab{flex:1;text-align:center;padding:10px 10px;border-radius:10px;font-size:13.5px;font-weight:600;
+  cursor:pointer;color:var(--foam-dim);background:transparent;transition:.18s;}
+.tab.active{background:var(--lava);color:#1B1310;box-shadow:0 3px 10px rgba(232,85,46,0.35);}
+
+/* ---------- home / topic grid ---------- */
+.home-intro{font-size:14.5px;color:var(--foam-dim);line-height:1.55;margin-bottom:22px;max-width:52ch;}
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:480px){.topic-grid{grid-template-columns:1fr;}}
+.topic-card{
+  border-radius:16px;overflow:hidden;cursor:pointer;
+  background:rgba(255,255,255,0.035);
+  border:1px solid rgba(255,255,255,0.09);
+  box-shadow:0 4px 18px rgba(0,0,0,0.25);
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.topic-card:hover{transform:translateY(-3px);border-color:rgba(242,179,61,0.4);
+  box-shadow:0 10px 26px rgba(0,0,0,0.35);}
+.topic-card svg{display:block;width:100%;height:auto;}
+.topic-body{padding:13px 14px 15px;}
+.topic-body .name{font-family:'Fraunces',serif;font-weight:600;font-size:15.5px;line-height:1.25;color:var(--foam);}
+.topic-body .row{display:flex;align-items:center;justify-content:space-between;margin-top:7px;}
+.topic-body .stat{font-size:11.5px;color:var(--foam-dim);}
+.mastery-chip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;
+  background:rgba(255,255,255,0.08);color:var(--foam-dim);}
+.mastery-chip.started{background:rgba(232,85,46,0.22);color:var(--lava-light);}
+.mastery-chip.high{background:rgba(63,125,92,0.28);color:var(--green-light);}
+
+/* ---------- quiz card ---------- */
+.quiz-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
+  border-radius:var(--radius);padding:22px 20px;margin-top:6px;}
+.progress-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;
+  color:var(--foam-dim);margin-bottom:14px;}
+.progress-bar-track{height:5px;border-radius:3px;background:rgba(255,255,255,0.1);overflow:hidden;flex:1;margin:0 12px;}
+.progress-bar-fill{height:100%;background:var(--lava);transition:width .3s ease;}
+.q-text{font-family:'Fraunces',serif;font-size:19px;font-weight:600;line-height:1.35;margin-bottom:18px;}
+.options{display:flex;flex-direction:column;gap:9px;}
+.opt-btn{text-align:left;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.03);color:var(--foam);font-family:inherit;font-size:14.5px;cursor:pointer;
+  transition:.15s;}
+.opt-btn:hover:not(:disabled){border-color:var(--gold);}
+.opt-btn:disabled{cursor:default;}
+.opt-btn.correct{background:rgba(63,125,92,0.35);border-color:var(--green-light);}
+.opt-btn.wrong{background:rgba(214,69,69,0.28);border-color:var(--wrong);}
+.opt-btn.dim{opacity:.5;}
+
+.feedback{margin-top:16px;padding:13px 14px;border-radius:10px;font-size:14px;line-height:1.45;
+  background:rgba(255,255,255,0.05);border-left:3px solid var(--gold);}
+.feedback.good{border-left-color:var(--green-light);}
+.feedback.bad{border-left-color:var(--wrong);}
+.feedback .verdict{font-weight:600;display:block;margin-bottom:3px;}
+
+.next-btn{margin-top:16px;width:100%;padding:12px;border-radius:10px;border:none;
+  background:var(--lava);color:#1B1512;font-family:inherit;font-weight:700;font-size:14.5px;cursor:pointer;}
+.next-btn:hover{background:var(--lava-light);}
+
+.back-link{display:inline-block;margin-bottom:14px;color:var(--foam-dim);font-size:13px;
+  cursor:pointer;text-decoration:none;}
+.back-link:hover{color:var(--foam);}
+
+/* ---------- fact intro card ---------- */
+.fact-card{background:linear-gradient(160deg, var(--ocean-mid) 0%, var(--basalt) 130%);
+  border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:26px 22px;margin-top:6px;
+  text-align:left;}
+.fact-eyebrow{font-size:12px;color:var(--gold);margin-bottom:10px;}
+.fact-text{font-family:'Fraunces',serif;font-size:22px;font-weight:600;line-height:1.4;color:var(--foam);}
+.fact-next-btn{margin-top:20px;width:100%;padding:13px;border-radius:10px;border:none;
+  background:var(--gold);color:#1B1512;font-family:inherit;font-weight:700;font-size:14.5px;cursor:pointer;}
+.fact-next-btn:hover{background:#F7C562;}
+
+/* ---------- complete screen ---------- */
+.complete{text-align:center;padding:36px 18px;}
+.complete .big{font-family:'Fraunces',serif;font-size:26px;font-weight:700;margin-bottom:8px;}
+.complete .sub{color:var(--foam-dim);font-size:14px;margin-bottom:24px;}
+.complete .score{font-size:44px;font-family:'Fraunces',serif;color:var(--gold);font-weight:700;}
+
+/* ---------- revise dashboard ---------- */
+.dash{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.dash-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;}
+.dash-row .name{width:150px;font-size:13px;flex-shrink:0;}
+.dash-row .bar{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,0.1);overflow:hidden;}
+.dash-row .bar-fill{height:100%;background:linear-gradient(90deg,var(--lava),var(--gold));}
+.dash-row .pct{width:38px;text-align:right;font-size:12px;color:var(--foam-dim);}
+
+.start-revise-btn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--gold);
+  color:#1B1512;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;margin-top:4px;}
+.start-revise-btn:disabled{background:rgba(255,255,255,0.1);color:var(--foam-dim);cursor:default;}
+.empty-note{font-size:13.5px;color:var(--foam-dim);text-align:center;padding:20px 10px;line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* ===================== DATA ===================== */
+const TOPICS = [
+  { id:'loc', name:"Location & Background", short:"Where Hawai'i is", questions:[
+    {q:"How many major volcanic islands make up the Hawaiian archipelago?", opts:["6","8","10","12"], a:1,
+     fact:"Hawai'i is an archipelago of eight major volcanic islands, plus several atolls."},
+    {q:"What was Hawai'i's former name?", opts:["Sandwich Islands","Friendly Islands","Society Islands","Cook Islands"], a:0,
+     fact:"The islands were once called the Sandwich Islands before being renamed."},
+    {q:"Roughly how far does the chain stretch, from Hawai'i to Kure Atoll?", opts:["400 km","1,200 km","2,400 km","4,000 km"], a:2,
+     fact:"The chain stretches about 2,400 km from Hawai'i in the south to Kure Atoll in the north."},
+    {q:"When did Hawai'i become the 50th US state?", opts:["1898","1941","1959","1972"], a:2,
+     fact:"Hawai'i joined the United States as its 50th state on 21 August 1959."},
+    {q:"Which Pacific subregion is Hawai'i part of?", opts:["Melanesia","Micronesia","Polynesia","Papuasia"], a:2,
+     fact:"Hawai'i sits within the Polynesian subregion of Oceania."},
+    {q:"What fraction of Hawaii's population lives on O'ahu?", opts:["1/4","1/3","1/2","2/3"], a:3,
+     fact:"About two-thirds of all Hawaii residents live on O'ahu."},
+    {q:"What makes Hawai'i geographically unique among US states?", opts:["Only state entirely on an archipelago","Only state with no coastline","Only state north of the Arctic Circle","Only landlocked state"], a:0,
+     fact:"Hawai'i is the only US state situated entirely on an archipelago."},
+    {q:"Which ethnic group is the largest share of Hawaii's population?", opts:["White","Asian","Native Hawaiian / Pacific Islander","Black / African American"], a:1,
+     fact:"Asian residents form the largest group in Hawaii, at roughly 37% of the population."}
+  ]},
+  { id:'leg', name:"Legends of the Islands", short:"Pele & Nāmaka", questions:[
+    {q:"Who is the Hawaiian fire goddess linked to forming the islands?", opts:["Nāmaka","Pele","Kanaloa","Hina"], a:1,
+     fact:"Pele, the fire goddess, is said to have formed the islands through her rage."},
+    {q:"Who is Pele's rival sea-goddess sister?", opts:["Nāmaka","Hina","Lono","Kū"], a:0,
+     fact:"Nāmaka, goddess of the sea, fought a long battle against her sister Pele."},
+    {q:"What Hawaiian term describes gods who embody a natural element, like Pele?", opts:["Mana","Akua","Kapu","Aloha"], a:1,
+     fact:"Pele and Nāmaka are both akua — sacred embodiments of a natural element."},
+    {q:"Which traditional dance is linked to Pele, modelled on lava flow?", opts:["Haka","Hula","Poi dance","Fire dance"], a:1,
+     fact:"Hula, when dedicated to Pele, is modelled after the movement of lava flows."},
+    {q:"Which island formed first when Pele attacked Nāmaka with fire?", opts:["Kaua'i","O'ahu","Maui","Hawai'i"], a:0,
+     fact:"Kaua'i formed first, when Pele's fire attack on Nāmaka began the legendary battle."},
+    {q:"Which volcano did Pele form on Maui during the battle?", opts:["Kīlauea","Mauna Loa","Haleakalā","Hualālai"], a:2,
+     fact:"Pele formed the Haleakalā volcano on Maui as the sisters' battle moved south-east."},
+    {q:"Where does Pele reside today, according to the legend?", opts:["Mauna Loa summit","Kīlauea crater","Diamond Head","Haleakalā crater"], a:1,
+     fact:"Pele is said to still reside in the crater atop Kīlauea, on Hawai'i island."},
+    {q:"Who eventually gave up trying to defeat Pele?", opts:["Kanaloa","Nāmaka","Lono","Kū"], a:1,
+     fact:"Nāmaka came to accept she could not kill or stop her sister, and left her be."}
+  ]},
+  { id:'geo', name:"Geological History", short:"Hotspots & plates", questions:[
+    {q:"Which tectonic plate does the Hawaiian archipelago sit on?", opts:["Pacific Plate","North American Plate","Nazca Plate","Indo-Australian Plate"], a:0,
+     fact:"The whole archipelago sits on the Pacific Plate."},
+    {q:"What geological feature is responsible for forming the islands?", opts:["A subduction zone","A mid-ocean ridge","A mantle hotspot","A continental rift"], a:2,
+     fact:"The islands sit above a stationary hotspot — an exceptionally hot region of the mantle."},
+    {q:"Who proposed the hotspot theory, in 1963?", opts:["Alfred Wegener","J.T. Wilson","Charles Darwin","Harry Hess"], a:1,
+     fact:"J.T. Wilson proposed the hotspot theory in 1963 and applied it to Hawai'i."},
+    {q:"Roughly how old is the oceanic crust beneath Hawai'i?", opts:["5 million years","20 million years","90 million years","200 million years"], a:2,
+     fact:"The oceanic crust under Hawai'i is nearly 90 million years old."},
+    {q:"Roughly how old is the oldest main Hawaiian island?", opts:["Under 500,000 years","About 5 million years","About 50 million years","About 90 million years"], a:1,
+     fact:"The oldest of the main islands formed a mere 5 million years ago."},
+    {q:"Why do the islands get progressively older along the chain?", opts:["The hotspot moves while the plate stays still","The plate moves while the hotspot stays still","Sea level rises over time","Younger islands erode faster"], a:1,
+     fact:"The hotspot stays fixed while the Pacific Plate slowly drifts over it."},
+    {q:"What forms first as rising magma breaks through the ocean floor?", opts:["An island","A volcano","A seamount","A crater"], a:2,
+     fact:"Magma first breaks the surface as a seamount, before building into a volcano then an island."},
+    {q:"Besides Hawai'i, where else does the hotspot idea apply?", opts:["The Himalayas","The Cook Islands","The Andes","Iceland only"], a:1,
+     fact:"The hotspot concept also applies to places like the Cook Islands and the Auckland volcanic field."}
+  ]},
+  { id:'oah', name:"O'ahu Island", short:"Geography of O'ahu", questions:[
+    {q:"What is O'ahu's size rank among the Hawaiian islands?", opts:["Largest","Second-largest","Third-largest","Smallest"], a:2,
+     fact:"O'ahu is the third-largest and most populated of the Hawaiian islands."},
+    {q:"What is O'ahu's shoreline length?", opts:["71 km","365 km","1,210 km","2,400 km"], a:1,
+     fact:"O'ahu's shoreline runs about 365 km."},
+    {q:"What two shield volcanoes make up O'ahu?", opts:["Mauna Loa & Kīlauea","Wai'anae & Ko'olau","Haleakalā & Hualālai","Kaua'i & Ni'ihau"], a:1,
+     fact:"O'ahu is made of two shield volcanoes, the Wai'anae and Ko'olau Ranges."},
+    {q:"What is O'ahu's highest point?", opts:["Diamond Head","Ka'ala","Mauna Kea","Haleakalā"], a:1,
+     fact:"Ka'ala, in the Wai'anae Range, is O'ahu's highest point at 1,220 m."},
+    {q:"What is O'ahu's capital and largest city?", opts:["Hilo","Lahaina","Honolulu","Kahului"], a:2,
+     fact:"Honolulu, on O'ahu's south-east coast, is Hawaii's capital and largest city."},
+    {q:"Roughly what share of O'ahu's population lives in or near Honolulu?", opts:["40%","60%","81%","95%"], a:2,
+     fact:"About 81% of O'ahu's population lives in or near the Honolulu urban area."},
+    {q:"Which two well-known sites sit on Honolulu's coast?", opts:["Diamond Head & Pearl Harbour","Mount Fuji & Tokyo Bay","Ayers Rock & Sydney Harbour","Neither of these"], a:0,
+     fact:"Honolulu is famous for Waikiki beach, Pearl Harbour, and Diamond Head."},
+    {q:"What share of Hawai'i's total tourists visit O'ahu?", opts:["About 10%","About 25%","About 50%","About 75%"], a:2,
+     fact:"Nearly 50% of all tourists to Hawai'i visit O'ahu."}
+  ]},
+  { id:'eco', name:"Economy & Tourism", short:"Climate, surf, income", questions:[
+    {q:"What are O'ahu's two main seasons?", opts:["Spring & autumn","Wet & dry","Hot & cold","Monsoon & drought"], a:1,
+     fact:"O'ahu has just two seasons: a dry season (May–Oct) and a wet season (Oct–April)."},
+    {q:"What is the Hawaiian word for surfing?", opts:["Aloha","He'e nalu","Mana","Hula"], a:1,
+     fact:"Surfing is called he'e nalu in Hawaiian and has deep cultural roots."},
+    {q:"Who is credited in mythology with introducing surfing?", opts:["Pele","Kanaloa","Lono","Nāmaka"], a:1,
+     fact:"Mythology credits Kanaloa, the sea god, with introducing surfing to the islands."},
+    {q:"What crop is the Dole Plantation famous for?", opts:["Sugar cane","Pineapple","Coffee","Macadamia nuts"], a:1,
+     fact:"The Dole Plantation combines pineapple farming with a major tourist attraction."},
+    {q:"Which of these is a major Hawaiian export?", opts:["Sugar","Cars","Electronics","Timber"], a:0,
+     fact:"Sugar, garments, flowers and canned fish are among Hawaii's main exports."},
+    {q:"What percentage of O'ahu's land is devoted to the military?", opts:["5%","21%","40%","60%"], a:1,
+     fact:"About 21% of O'ahu's land is devoted to the military — the largest share of any island."},
+    {q:"About what share of Hawaii's population is military personnel and dependents?", opts:["2%","8%","15%","25%"], a:1,
+     fact:"Military personnel and dependents make up about 8% of Hawaii's population."},
+    {q:"Where do most O'ahu tourists stay?", opts:["Waikiki","Pearl Harbour","The North Shore","Diamond Head"], a:0,
+     fact:"Most tourists stay in hotels along Waikiki beach."}
+  ]},
+  { id:'chal', name:"Challenges Facing O'ahu", short:"Housing, traffic, climate", questions:[
+    {q:"What is the first of O'ahu's top four problems listed?", opts:["Traffic congestion","Homelessness & housing costs","Climate change","Tourism reliance"], a:1,
+     fact:"Homelessness and unaffordable housing is listed as O'ahu's top challenge."},
+    {q:"Why is a tourism-dependent economy considered risky?", opts:["Tourists dislike the climate","It's vulnerable during economic downturns","It uses too much land","It conflicts with farming"], a:1,
+     fact:"Heavy reliance on tourism leaves Honolulu's economy exposed during economic downturns."},
+    {q:"Which global event worsened Hawaii's existing economic concerns?", opts:["The 2008 financial crisis","The COVID-19 pandemic","World War Two","The 1980s oil crisis"], a:1,
+     fact:"The COVID-19 pandemic worsened joblessness and business concerns that already existed."},
+    {q:"What climate-related risks threaten O'ahu's infrastructure?", opts:["Rising sea levels & coastal erosion","Increased snowfall","Volcanic ash","Falling sea levels"], a:0,
+     fact:"Rising sea levels and coastal erosion pose growing threats to O'ahu's infrastructure."},
+    {q:"Roughly how many registered cars are on O'ahu, against its population?", opts:["Same as the population","Half the population","Over 1 million cars vs 1.4 million people","Twice the population"], a:2,
+     fact:"O'ahu has over one million registered cars for a population of 1.4 million."},
+    {q:"What contributes most to O'ahu's traffic congestion?", opts:["Lack of public transport & centralised jobs","Too many bike lanes","Narrow beaches","Volcanic activity"], a:0,
+     fact:"Jobs concentrated in towns like Honolulu, with little public transport, drive daily congestion."},
+    {q:"What limits new hotel and resort construction on O'ahu?", opts:["Zoning laws","Lack of tourists","Military restrictions only","Volcanic activity"], a:0,
+     fact:"Zoning laws prevent new hotels and resorts in many parts of O'ahu."},
+    {q:"Which of these is NOT one of O'ahu's top four listed problems?", opts:["Homelessness","Traffic congestion","Overfishing","Reliance on tourism"], a:2,
+     fact:"Overfishing isn't listed — the four are housing, tourism reliance, climate change, and traffic."}
+  ]},
+  { id:'dm', name:"Perspectives & Decision-Making", short:"What the exam actually tests", questions:[
+    {q:"What is a \"geographic challenge\", as this standard defines it?", opts:["A map-reading test","A topic, problem or opportunity tied to an environment that people can respond to","A natural disaster only","A population statistic"], a:1,
+     fact:"A geographic challenge is any topic, problem, or opportunity tied to an environment that people can respond to."},
+    {q:"What's the difference between a \"perspective\" and a \"viewpoint\"?", opts:["A perspective is a broad way of seeing the world shaped by values and beliefs; a viewpoint is a specific opinion on the challenge","They mean exactly the same thing","A viewpoint is broader than a perspective","Only groups have perspectives, only individuals have viewpoints"], a:0,
+     fact:"A perspective is a broad way of seeing the world (e.g. economic); a viewpoint is a specific opinion on the challenge."},
+    {q:"Which of these is one of the standard's five named perspective categories?", opts:["Technological","Recreational","Economic","Environmental"], a:2,
+     fact:"The standard names five perspective categories: economic, social, political, indigenous, and spiritual."},
+    {q:"What must a student do to reach Excellence on this standard?", opts:["List as many facts as possible","Evaluate the extent to which perspectives and viewpoints inform the decision-making","Describe the geographic challenge only","Draw a detailed map"], a:1,
+     fact:"Excellence means evaluating how far perspectives and viewpoints actually shape the decision, using evidence and terminology."},
+    {q:"What counts as the \"wider Pacific region\" for this standard?", opts:["Just Aotearoa New Zealand","Micronesia, Melanesia, and Polynesia, including Aotearoa New Zealand","Only US Pacific territories","Every country bordering the Pacific Ocean"], a:1,
+     fact:"The wider Pacific region means Micronesia, Melanesia, and Polynesia, including Aotearoa New Zealand."},
+    {q:"In the O'ahu booklet, which issue links housing, zoning, and tourism together?", opts:["Coral bleaching","Limited land shared between housing, tourism, and the military","Overfishing","Airport congestion"], a:1,
+     fact:"O'ahu's housing crisis is tangled up with zoning laws protecting tourism, and with 21% of land held by the military."},
+    {q:"Which stakeholder is most likely to hold an economic perspective favouring existing tourism zoning?", opts:["A homeless resident","Hotel and resort investors","A Native Hawaiian elder","A meteorologist"], a:1,
+     fact:"Hotel and resort investors tend to hold an economic perspective — protecting zoning that favours tourism."},
+    {q:"Which stakeholder is most likely to hold an indigenous or spiritual perspective on land-use decisions?", opts:["A tourist","A Native Hawaiian community member","An airline executive","A traffic engineer"], a:1,
+     fact:"Native Hawaiian community members often bring an indigenous or spiritual perspective, tied to connection with the land."},
+    {q:"What viewpoint might a housing advocate hold on O'ahu's zoning laws?", opts:["Zoning should ease to allow more affordable housing","Zoning should stop all development entirely","Zoning is irrelevant to housing","Housing should only be built in flood zones"], a:0,
+     fact:"A housing advocate's viewpoint might be that zoning laws should ease to allow more affordable housing."},
+    {q:"When a question asks you to \"evaluate the extent to which\" perspectives inform a decision, what is it really asking you to judge?", opts:["Whether the challenge is real","How much weight each perspective actually carried in the decision made","Which stakeholder is correct","How many stakeholders exist"], a:1,
+     fact:"Evaluating means judging how much each perspective or viewpoint actually shaped the decision — not just listing them."}
+  ]}
+];
+
+/* ===================== STATE ===================== */
+let progress = {};          // factKey -> {box, seen, correct}
+let view = 'home';          // home | learn | revise | complete
+let currentTopic = null;
+let queue = [];
+let qIndex = 0;
+let answered = false;
+let sessionCorrect = 0;
+let sessionTotal = 0;
+let sessionKind = 'learn';  // 'learn' | 'revise'
+let phase = 'question';     // 'intro' | 'question' — learn mode shows the fact first
+
+function factKey(topicId, qi){ return topicId+'-'+qi; }
+
+/* ===================== STORAGE ===================== */
+/* Uses Claude's artifact storage when available (persists across devices within
+   claude.ai), and falls back to localStorage when self-hosted as a plain file
+   (persists per browser only). */
+async function storageGet(key){
+  if(window.storage && typeof window.storage.get === 'function'){
+    try{ return await window.storage.get(key); }catch(e){ /* fall through */ }
+  }
+  try{
+    const v = localStorage.getItem(key);
+    return v!==null ? {key, value:v} : null;
+  }catch(e){ return null; }
+}
+async function storageSet(key, value){
+  if(window.storage && typeof window.storage.set === 'function'){
+    try{ return await window.storage.set(key, value); }catch(e){ /* fall through */ }
+  }
+  try{ localStorage.setItem(key, value); return {key, value}; }catch(e){ return null; }
+}
+
+async function loadProgress(){
+  try{
+    const r = await storageGet('progress');
+    progress = r ? JSON.parse(r.value) : {};
+  }catch(e){ progress = {}; }
+}
+async function saveProgress(){
+  try{ await storageSet('progress', JSON.stringify(progress)); }catch(e){ /* non-fatal */ }
+}
+function getEntry(key){
+  if(!progress[key]) progress[key] = {box:0, seen:0, correct:0};
+  return progress[key];
+}
+
+/* ===================== MASTERY HELPERS ===================== */
+function topicMastery(topic){
+  let total = topic.questions.length, sum = 0;
+  topic.questions.forEach((_,i)=>{
+    const e = progress[factKey(topic.id,i)];
+    if(e) sum += Math.min(e.box,4)/4;
+  });
+  return total ? sum/total : 0;
+}
+function overallStats(){
+  let seenCount=0, masteredCount=0, total=0;
+  TOPICS.forEach(t=>t.questions.forEach((_,i)=>{
+    total++;
+    const e = progress[factKey(t.id,i)];
+    if(e && e.seen>0) seenCount++;
+    if(e && e.box>=3) masteredCount++;
+  }));
+  return {seenCount, masteredCount, total};
+}
+
+/* ===================== RENDER: SHELL ===================== */
+const app = document.getElementById('app');
+
+function render(){
+  let html = `<header>
+    <div class="brand">
+      <div class="logo-dot"></div>
+      <div>
+        <div class="mark">HOT<span>SPOT</span></div>
+        <div class="sub">O'ahu & the Hawaiian Islands — Geography 1.4</div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="resetProgress()">Reset progress</button>
+  </header>`;
+
+  html += `<div class="tabs">
+    <div class="tab ${view==='home'?'active':''}" onclick="goHome()">Learn</div>
+    <div class="tab ${view==='revise'||view==='revise-dash'?'active':''}" onclick="goReviseDash()">Revise</div>
+  </div>`;
+
+  html += `<div id="content"></div>`;
+  app.innerHTML = html;
+  renderContent();
+}
+
+function renderContent(){
+  const c = document.getElementById('content');
+  if(view==='home') c.innerHTML = homeView();
+  else if(view==='learn') c.innerHTML = quizView('learn');
+  else if(view==='revise') c.innerHTML = quizView('revise');
+  else if(view==='revise-dash') c.innerHTML = reviseDashView();
+  else if(view==='complete') c.innerHTML = completeView();
+}
+
+/* ===================== HOME VIEW ===================== */
+function islandSVG(mastery){
+  // mastery: 0..1
+  const w=220, h=150, waterY=98;
+  const peakH = 14 + mastery*66;           // how tall the cone rises above water
+  const apexY = waterY - peakH;
+  const baseHalf = 46 + mastery*8;          // base width grows slightly as island matures
+  const midY = waterY - peakH*0.42;
+  const midHalfL = baseHalf*0.55, midHalfR = baseHalf*0.5;
+
+  let rockFill, rockFillDark, glow;
+  if(mastery < 0.05){ rockFill='#4A3A32'; rockFillDark='#2E2420'; glow=0; }
+  else if(mastery < 0.75){ rockFill='url(#lavaGrad)'; rockFillDark='#7A2E1C'; glow=Math.min(mastery*1.3,1); }
+  else { rockFill='url(#greenGrad)'; rockFillDark='#2C5B41'; glow=0; }
+
+  const capRing = mastery>=0.75 ? `<ellipse cx="${w/2}" cy="${apexY+6}" rx="${baseHalf*0.3}" ry="5" fill="#A9DDB6" opacity="0.55"/>` : '';
+  const smokePuff = (mastery>0.15 && mastery<0.75) ? `
+    <circle cx="${w/2+6}" cy="${apexY-10}" r="5" fill="#EAF4F4" opacity="0.18"/>
+    <circle cx="${w/2+12}" cy="${apexY-19}" r="7" fill="#EAF4F4" opacity="0.13"/>` : '';
+  const glowCircle = glow>0 ? `<circle cx="${w/2}" cy="${apexY+4}" r="12" fill="var(--lava-light)" opacity="${0.35*glow}"/>` : '';
+
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0E2E48"/>
+        <stop offset="100%" stop-color="#12446B"/>
+      </linearGradient>
+      <linearGradient id="seaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1C6E8C"/>
+        <stop offset="100%" stop-color="#0A2A43"/>
+      </linearGradient>
+      <linearGradient id="lavaGrad" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#7A2E1C"/>
+        <stop offset="60%" stop-color="#E8552E"/>
+        <stop offset="100%" stop-color="#FFB25E"/>
+      </linearGradient>
+      <linearGradient id="greenGrad" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#2C5B41"/>
+        <stop offset="65%" stop-color="#3F7D5C"/>
+        <stop offset="100%" stop-color="#8FCE9F"/>
+      </linearGradient>
+    </defs>
+    <rect width="${w}" height="${h}" fill="url(#skyGrad)"/>
+    <circle cx="34" cy="24" r="1.4" fill="#F4F7F6" opacity="0.5"/>
+    <circle cx="62" cy="14" r="1" fill="#F4F7F6" opacity="0.35"/>
+    <circle cx="176" cy="30" r="1.3" fill="#F4F7F6" opacity="0.4"/>
+    ${smokePuff}
+    <path d="M ${w/2} ${apexY}
+             C ${w/2 - midHalfL*0.5} ${apexY + (midY-apexY)*0.4}, ${w/2 - midHalfL} ${midY}, ${w/2 - baseHalf} ${waterY}
+             L ${w/2 + baseHalf} ${waterY}
+             C ${w/2 + midHalfR} ${midY}, ${w/2 + midHalfR*0.5} ${apexY + (midY-apexY)*0.4}, ${w/2} ${apexY} Z"
+          fill="${rockFill}"/>
+    ${glowCircle}
+    ${capRing}
+    <rect x="0" y="${waterY}" width="${w}" height="${h-waterY}" fill="url(#seaGrad)"/>
+    <path d="M0 ${waterY} Q ${w*0.15} ${waterY-4}, ${w*0.3} ${waterY} T ${w*0.6} ${waterY} T ${w*0.9} ${waterY} T ${w*1.15} ${waterY}"
+          fill="none" stroke="#F4F7F6" stroke-opacity="0.3" stroke-width="1.5"/>
+  </svg>`;
+}
+
+function homeView(){
+  let html = `<p class="home-intro">Pick a topic to learn it — each fact is shown first, then quizzed straight away. Islands rise from the sea and turn green as you master a topic.</p>`;
+  html += `<div class="topic-grid">`;
+  TOPICS.forEach(t=>{
+    const m = topicMastery(t);
+    const pct = Math.round(m*100);
+    const chipClass = m>=0.75 ? 'high' : (m>0 ? 'started' : '');
+    html += `<div class="topic-card" onclick="startLearn('${t.id}')">
+      ${islandSVG(m)}
+      <div class="topic-body">
+        <div class="name">${t.name}</div>
+        <div class="row">
+          <span class="stat">${t.short}</span>
+          <span class="mastery-chip ${chipClass}">${pct}%</span>
+        </div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+/* ===================== LEARN / REVISE QUIZ FLOW ===================== */
+function startLearn(topicId){
+  currentTopic = TOPICS.find(t=>t.id===topicId);
+  queue = currentTopic.questions.map((q,i)=>({topicId, qi:i, q}));
+  qIndex = 0; answered = false; sessionCorrect=0; sessionTotal=0;
+  sessionKind = 'learn';
+  phase = 'intro';
+  view = 'learn';
+  render();
+}
+
+function goHome(){ view='home'; render(); }
+
+function goReviseDash(){ view='revise-dash'; render(); }
+
+function reviseDashView(){
+  const stats = overallStats();
+  let html = `<div class="dash">`;
+  TOPICS.forEach(t=>{
+    const m = Math.round(topicMastery(t)*100);
+    html += `<div class="dash-row">
+      <div class="name">${t.name}</div>
+      <div class="bar"><div class="bar-fill" style="width:${m}%;"></div></div>
+      <div class="pct">${m}%</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  if(stats.seenCount===0){
+    html += `<div class="empty-note">You haven't learned any facts yet — head to the Learn tab to start a topic, then come back here to revise them.</div>`;
+  } else {
+    html += `<button class="start-revise-btn" onclick="startRevise()">Start revision session (${Math.min(15,stats.seenCount)} questions)</button>`;
+  }
+  return html;
+}
+
+function startRevise(){
+  // build weighted pool from all seen facts, prioritising low box levels
+  let pool = [];
+  TOPICS.forEach(t=>t.questions.forEach((q,i)=>{
+    const key = factKey(t.id,i);
+    const e = progress[key];
+    if(e && e.seen>0){
+      const weight = 5 - Math.min(e.box,4); // lower box = higher weight
+      for(let w=0; w<weight; w++) pool.push({topicId:t.id, qi:i, q});
+    }
+  }));
+  // shuffle
+  for(let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  // dedupe while preserving weighted preference, cap at 15
+  const seenIds = new Set(); const finalQueue = [];
+  for(const item of pool){
+    const id = item.topicId+'-'+item.qi;
+    if(!seenIds.has(id)){ seenIds.add(id); finalQueue.push(item); }
+    if(finalQueue.length>=15) break;
+  }
+  queue = finalQueue; qIndex=0; answered=false; sessionCorrect=0; sessionTotal=0;
+  sessionKind = 'revise';
+  phase = 'question';
+  view='revise';
+  render();
+}
+
+function quizView(kind){
+  if(qIndex >= queue.length){
+    view='complete';
+    return completeView();
+  }
+  const item = queue[qIndex];
+  const topic = TOPICS.find(t=>t.id===item.topicId);
+  const q = item.q;
+  const pct = Math.round((qIndex/queue.length)*100);
+
+  if(kind==='learn' && phase==='intro'){
+    return factIntroView(topic, item, q, pct);
+  }
+
+  let html = `<span class="back-link" onclick="${kind==='learn'?'goHome()':'goReviseDash()'}">&larr; ${kind==='learn'?'All topics':'Revise'}</span>`;
+  html += `<div class="quiz-card">
+    <div class="progress-row">
+      <span>${kind==='learn'?topic.name:'Mixed revision'}</span>
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%;"></div></div>
+      <span>${qIndex+1}/${queue.length}</span>
+    </div>
+    <div class="q-text">${q.q}</div>
+    <div class="options" id="opts">`;
+  q.opts.forEach((opt,i)=>{
+    html += `<button class="opt-btn" onclick="selectAnswer(${i})" id="opt-${i}">${opt}</button>`;
+  });
+  html += `</div><div id="feedback"></div></div>`;
+  return html;
+}
+
+function factIntroView(topic, item, q, pct){
+  return `<span class="back-link" onclick="goHome()">&larr; All topics</span>
+  <div class="quiz-card" style="margin-bottom:0;">
+    <div class="progress-row">
+      <span>${topic.name}</span>
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%;"></div></div>
+      <span>${qIndex+1}/${queue.length}</span>
+    </div>
+  </div>
+  <div class="fact-card">
+    <div class="fact-eyebrow">Know this before you're quizzed</div>
+    <div class="fact-text">${q.fact}</div>
+    <button class="fact-next-btn" onclick="proceedToQuestion()">Quiz me on it</button>
+  </div>`;
+}
+
+function proceedToQuestion(){
+  phase = 'question';
+  render();
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered = true;
+  const item = queue[qIndex];
+  const q = item.q;
+  const key = factKey(item.topicId, item.qi);
+  const entry = getEntry(key);
+  entry.seen += 1;
+  const correct = (i === q.a);
+  if(correct){ entry.correct += 1; entry.box = Math.min((entry.box||0)+1, 4); sessionCorrect++; }
+  else { entry.box = 0; }
+  sessionTotal++;
+  saveProgress();
+
+  q.opts.forEach((_,idx)=>{
+    const btn = document.getElementById('opt-'+idx);
+    btn.disabled = true;
+    if(idx===q.a) btn.classList.add('correct');
+    else if(idx===i) btn.classList.add('wrong');
+    else btn.classList.add('dim');
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.innerHTML = `<div class="feedback ${correct?'good':'bad'}">
+    <span class="verdict">${correct? pickCorrectVerdict() : pickWrongVerdict()}</span>
+    ${q.fact}
+  </div>
+  <button class="next-btn" onclick="nextQuestion()">${qIndex+1<queue.length?'Next':'Finish'}</button>`;
+}
+
+function pickCorrectVerdict(){
+  const opts = ["Nice one.","Spot on.","That's it.","Exactly right."];
+  return opts[Math.floor(Math.random()*opts.length)];
+}
+function pickWrongVerdict(){
+  const opts = ["Not quite.","Close, but no.","That's not it.","Worth another look."];
+  return opts[Math.floor(Math.random()*opts.length)];
+}
+
+function nextQuestion(){
+  qIndex++; answered=false;
+  if(sessionKind==='learn') phase='intro';
+  render();
+}
+
+function completeView(){
+  const pct = sessionTotal? Math.round((sessionCorrect/sessionTotal)*100) : 0;
+  let html = `<div class="quiz-card complete">
+    <div class="big">Session complete</div>
+    <div class="sub">${sessionKind==='learn' && currentTopic ? currentTopic.name : 'Mixed revision'}</div>
+    <div class="score">${sessionCorrect}/${sessionTotal}</div>
+    <div class="sub" style="margin-top:6px;">${pct}% correct</div>
+  </div>
+  <button class="next-btn" style="margin-top:16px;" onclick="${sessionKind==='learn'?'goHome()':'goReviseDash()'}">${sessionKind==='learn'?'Back to topics':'Back to revision'}</button>`;
+  return html;
+}
+
+function resetProgress(){
+  const c = document.getElementById('content');
+  c.innerHTML = `<div class="quiz-card" style="text-align:center;">
+    <div class="q-text" style="font-size:17px;">Clear all learning progress?</div>
+    <p style="color:var(--foam-dim); font-size:13.5px; margin-top:-6px;">This can't be undone.</p>
+    <div style="display:flex; gap:10px; margin-top:14px;">
+      <button class="next-btn" style="background:var(--wrong); color:var(--foam); flex:1;" onclick="confirmReset()">Yes, clear it</button>
+      <button class="next-btn" style="background:rgba(255,255,255,0.1); color:var(--foam); flex:1;" onclick="cancelReset()">Cancel</button>
+    </div>
+  </div>`;
+}
+function confirmReset(){
+  progress = {};
+  saveProgress();
+  view='home';
+  render();
+}
+function cancelReset(){
+  render();
+}
+
+/* ===================== INIT ===================== */
+(async function init(){
+  await loadProgress();
+  render();
+})();
+</script>
+</body>
+</html>
