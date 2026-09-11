@@ -9,10 +9,11 @@ decisions below. Read this before touching `app.jsx`.
 
 ## Current state
 
-- **Version:** 0.3.0 (in `APP_VERSION` in `app.jsx`, and matching
+- **Version:** 0.4.0 (in `APP_VERSION` in `app.jsx`, and matching
   `CACHE_NAME` in `sw.js`)
 - **Live now:** Science, all four areas (Biology, Chemistry, Physics,
-  Earth & Space), 8 modules, 33 submodules, 112 questions total
+  Earth & Space), 8 modules, 33 submodules, 145 questions total, all
+  tagged with a difficulty band (see below)
 - **Two parallel copies of the app exist** — see "Two builds" below.
   They should be kept in sync by hand; there's no shared source yet.
 
@@ -36,8 +37,11 @@ decisions below. Read this before touching `app.jsx`.
    (globals via CDN instead), inline icon components near the top
    instead of a lucide import, `loadState()`/`useEffect` persistence
    instead of `useState(emptyState)`, safe-area-inset padding on the
-   root container, root component named differently only if you check
-   — both are named `Orbit`.
+   root container, a different Settings-screen footer line ("saved
+   automatically on this device" vs "kept for this session"), and a
+   `ReactDOM.createRoot(...).render(...)` call at the bottom instead of
+   `export default`. Every other line — content, scoring, components,
+   screens, routing — is identical text between the two files.
 
    **When you change content or logic, decide whether it needs to land
    in one or both files.** Content/scoring/screen changes: both.
@@ -58,8 +62,8 @@ SUBJECTS = {
             submodules: [
               {
                 id, name, blurb,
-                learn: [ { title, body, children: [...] } ],   // recursive tree
-                questions: [ { id, type: "mcq"|"text", prompt, options?, answer?, answers? } ],
+                learn: [ { title, body, band, children: [...] } ],   // recursive tree
+                questions: [ { id, band, type: "mcq"|"text", prompt, options?, answer?, answers? } ],
               },
             ],
           },
@@ -71,7 +75,9 @@ SUBJECTS = {
 ```
 
 - `learn` nodes can nest arbitrarily via `children`, but in practice
-  submodules currently use 1–2 top-level nodes with 2–4 children each.
+  submodules currently use 1–2 top-level nodes with 2–4 children each,
+  plus one additional band-3 top-level node (see "Difficulty bands"
+  below).
 - `type: "mcq"` questions use `options` (array) + `answer` (exact
   string match). `type: "text"` questions use `answers` (array of
   accepted strings) — matched via `normalizeAnswer()` (lowercase, strip
@@ -79,82 +85,190 @@ SUBJECTS = {
   forgiven. Always include a couple of phrasing variants in `answers`
   (e.g. `["light-year", "light year", "light-years", "light years"]`).
 
+## Difficulty bands (Achieved / Merit / Excellence) — added in v0.4.0
+
+Every learn node and every question carries a numeric `band` (1, 2, or
+3), matching NCEA's Achieved/Merit/Excellence tiers. The `BANDS`
+constant near the top of `app.jsx` holds the level → code → label
+mapping (`1 → "A" → "Achieved"`, etc.). `bandOf(item)` reads
+`item.band`, defaulting to `1` if absent, so nothing breaks if a future
+content addition forgets to set it.
+
+**Band is a property of content, not of saved state.** `questionStats`
+is still keyed by question `id` alone (see "Question ID convention"
+below) — scoring functions look up each question's `band` from the
+content tree at render time, filter by it, and aggregate. This means
+**no `SCHEMA_VERSION` bump and no migration code** was needed to add
+this feature, consistent with how the submodule restructuring was
+handled previously.
+
+**How bands behave differs between Learn and Revise, by design:**
+
+- **Learn mode is cumulative.** `LearnScreen` holds a `maxBand` state
+  (via `BandTabs`, single-select) and shows every node with
+  `band <= maxBand`. Selecting "Merit" shows Achieved + Merit content;
+  Excellence adds the rest. This matches how the concepts actually
+  build on each other.
+- **Revise mode is exclusive and multi-select.** Before a Revise
+  session starts, `ReviseSetupScreen` shows `BandCheckboxes` — the
+  student ticks exactly which band(s) they want questions from (all
+  three are checked by default). The resulting question pool is
+  `questions.filter(q => selectedBands.includes(bandOf(q)))`. A band
+  with zero questions in the current pool is shown disabled with "No
+  questions yet" rather than being hidden.
+
+**Screen flow changed slightly** to fit the Revise checkbox step —
+see "Screen flow" below.
+
+**Tagging approach used for existing content (v0.4.0 pass):**
+- All 33 submodules' existing learn nodes: top-level nodes tagged band
+  1, their children tagged band 2 (children were already the more
+  detailed/applied material, so this was a natural fit without
+  rewriting).
+- All 112 pre-existing questions: tagged band 2 if the prompt contains
+  the word "why" (an "explain the reasoning" question), band 1
+  otherwise. This is a heuristic, not a hand-reviewed classification —
+  **worth a manual pass eventually** to catch questions that are
+  Merit-level in substance without literally containing "why", and to
+  promote some existing band-1 questions to band 2 where they fit.
+- **33 new Excellence-tier (band 3) items were hand-written**, one
+  question + one learn node per submodule, so every submodule has real
+  content at all three bands rather than an empty Excellence tab. These
+  are apply/evaluate/justify-style, not just recall — e.g. predicting
+  bond type from an unfamiliar pair of elements, or explaining why a
+  rocket accelerates in a vacuum. New question IDs continue each
+  module's numbering (e.g. `cells_q15`–`cells_q18`,
+  `forces_q15`–`forces_q19`) — see ID convention rules below, unchanged.
+
+**Known gap:** band coverage is uneven — every submodule has *some*
+Achieved, Merit, and Excellence content, but Merit is thin (often just
+the pre-existing learn-node children plus a handful of "why" questions)
+and Excellence is exactly one question/node deep per submodule. A
+proper content pass adding more Merit and Excellence questions per
+submodule (aiming for 3-4 per band, similar to the original band-1
+density) is the natural next step, area by area.
+
+**Design choices made without further confirmation, worth reviewing:**
+- The "mastered" checkmark badge on the submodule checklist
+  (`SubmoduleListScreen`) reflects **Achieved-band mastery specifically**
+  (`submoduleBandScore(sm, 1, progress) >= MASTERY_THRESHOLD`), not an
+  average across all bands — since Achieved is the NCEA pass threshold.
+  Merit/Excellence scores are shown alongside as three small per-band
+  rings per row, but don't affect the checkmark.
+- The overall (non-band) `submoduleScore()` / `moduleScore()` /
+  `areaScore()` / `subjectScore()` functions were kept, now defined as
+  the average of whichever bands have content (via a shared `avg()`
+  helper) — used for the coarse rings on Home/Area/Module screens where
+  a single number is more useful than three.
+
 ## Question ID convention — READ BEFORE EDITING CONTENT
 
-Question IDs follow `{moduleId}_q{n}`, e.g. `cells_q1`...`cells_q14`.
-**Progress is stored keyed by these IDs, not by submodule structure.**
+Question IDs follow `{moduleId}_q{n}`, e.g. `cells_q1`...`cells_q18`
+(the last four of which are the new band-3 questions added in v0.4.0).
+**Progress is stored keyed by these IDs, not by submodule structure or
+band.**
 
 ```
 state.progress[subjectId][areaId][moduleId].questionStats["cells_q1"]
   = { seen, correct, ema }
 ```
 
-This is *why* the big submodule restructuring (splitting each module's
-flat question list into submodule-scoped groups) didn't need any state
-migration — the IDs never changed, only which array they're grouped
-under. Submodule/module/area/subject scores are all computed live from
-this flat stats object by looking up whichever question IDs the current
-content defines.
-
-**Rules for future content edits:**
+**Rules for future content edits (unchanged, still apply):**
 - Adding new questions: always use the next free `_qN` number. Never
   reuse or renumber existing IDs.
 - Removing a question: just stop referencing its ID in the content
-  tree. The orphaned stat sits harmlessly unused — don't try to delete
-  it from anyone's saved state.
-- Renaming a `subject`/`area`/`module` `id` (not `name` — the `id`)
-  breaks existing saved progress for that whole branch, because the
-  state tree is nested under those IDs. If a module ever needs to be
-  renamed for display purposes, change `name`, not `id`.
-- Submodule `id`s are *not* part of the progress key path (only
-  `moduleId` is), so they're safe to rename/reorganise freely — that's
-  what made the last restructuring low-risk.
+  tree. The orphaned stat sits harmlessly unused.
+- Renaming a `subject`/`area`/`module` `id` (not `name`) breaks
+  existing saved progress for that branch. Change `name`, not `id`.
+- Submodule `id`s are not part of the progress key path, so they're
+  safe to rename/reorganise freely.
+- **Changing a question's `band` after the fact is safe** — it just
+  reclassifies which band bucket that question's existing EMA shows up
+  under. No state migration needed, same as everything else about
+  bands.
 
 ## Scoring model
 
 - Each question tracks an EMA (exponential moving average) of
   correctness, 0–100: `ema = ema*0.65 + (correct?100:0)*0.35`, seeded
-  by the first attempt. Recent answers matter more than old ones.
-- `submoduleScore()` = average EMA across a submodule's questions,
-  **including unattempted ones as 0**. This makes the score reflect
-  *coverage* as well as *accuracy* — a submodule you've only half
-  attempted can't show 100%.
-- `moduleScore()` = average of its submodules' scores (not a flat
-  average of all questions — submodules are weighted equally
-  regardless of how many questions they contain).
-- `areaScore()` / `subjectScore()` = average of the level below,
-  filtered to `available: true` areas only.
-- `MASTERY_THRESHOLD = 80` — submodules at or above this show a
-  checkmark on the checklist screen instead of a number badge.
-- `lastStudied` is a timestamp on the module (not submodule) level,
-  set whenever a revise session finishes.
+  by the first attempt.
+- **`submoduleBandScore(submodule, band, moduleProgress)`** — average
+  EMA across a submodule's questions *at that band only*, including
+  unattempted ones as 0 (so it reflects coverage, not just accuracy).
+  Returns `null` if the submodule has no questions at that band.
+- **`moduleBandScore` / `areaBandScore` / `subjectBandScore`** —
+  average of the level below **at that band**, via the shared `avg()`
+  helper, which filters out `null`s rather than treating them as 0 (so
+  a submodule with no Excellence content yet doesn't drag down the
+  Excellence average for the whole module).
+- **`submoduleScore` / `moduleScore` / `areaScore` / `subjectScore`**
+  (no band argument) — the overall/coarse versions, now defined as
+  `avg()` across whichever of the three band scores are non-null.
+  Used where a single number is more useful (Home, Area, Module list
+  rings).
+- `MASTERY_THRESHOLD = 80` — now checked per band where relevant (see
+  "mastered" badge note above).
+- `lastStudied` is still a timestamp on the module level, set whenever
+  a Revise session finishes, regardless of which band(s) were tested.
 
 ## Screen flow
 
 ```
 Home → Areas → Modules → Submodule checklist → Learn | Revise
+                                              ↳ Learn: band tabs (cumulative),
+                                                opens on whichever band was
+                                                selected on the Mode screen
+                                              ↳ Revise: band checkboxes (exclusive,
+                                                multi-select) → quiz session
                                               ↳ "Revise this whole module"
-                                                (pools all submodules' questions
-                                                 into one session, submoduleId: "ALL")
+                                                (pools all submodules' questions,
+                                                 same band-checkbox step,
+                                                 submoduleId: "ALL")
 ```
 
-Navigation is a simple stack (`nav` array of `{screen, ...params}`,
-push/pop) rather than a router — fine for this depth, would need
-rethinking if subjects/areas nest deeper later.
+New screen added in v0.4.0: **`revise-setup`**, which sits between the
+Mode-choice screen (or the "Revise this whole module" button) and the
+quiz itself. It renders `ReviseSetupScreen`, which shows
+`BandCheckboxes` and a "Start (N questions)" button; the chosen bands
+array is passed forward via nav state (`{ ...current, screen: "revise",
+bands }`) to `ReviseScreen`, which filters its question pool before
+shuffling.
 
-`ReviseScreen` is generic: it just needs an object with `.name` and
-`.questions`. Both a real submodule and the synthetic "revise all"
-pseudo-object (`{ id: "all", name: module.name, questions: [...flattened] }`)
-satisfy that shape — no special-casing inside the component.
+Navigation is still a simple stack (`nav` array of `{screen, ...params}`,
+push/pop), unchanged in shape — the new screen is just another entry
+in the same if/else routing chain in the root `Orbit` component.
 
-## Content coverage (as of v0.3.0)
+`ReviseScreen` still just needs an object with `.name` and
+`.questions` for `module`, plus a new `bands` array prop (defaults to
+`[1, 2, 3]` if somehow missing). Both a real submodule and the
+synthetic "revise all" pseudo-object satisfy that shape.
 
-| Area | Modules | Submodules | Questions |
+## New components (v0.4.0)
+
+- **`BandBadge({ level, accent, size })`** — small pill showing "A"/
+  "M"/"E". Used on learn nodes above band 1, and on the in-quiz header
+  when more than one band is being tested in the same session.
+- **`BandTabs({ selected, onSelect, accent, scores })`** — single-select
+  row of three tabs, each showing that band's proficiency %. Used in
+  `ModeChoiceScreen` (informational, plus drives what Learn opens to)
+  and `LearnScreen` (drives the cumulative content filter).
+- **`BandCheckboxes({ selectedSet, onToggle, accent, counts })`** —
+  multi-select checkbox list, one row per band, disabled when a band
+  has zero questions in the current pool. Used only in
+  `ReviseSetupScreen`.
+
+## Content coverage (as of v0.4.0)
+
+| Area | Modules | Submodules | Questions (band 1 / 2 / 3) |
 |---|---|---|---|
-| Biology | Cells & Organisation, Ecology & Ecosystems | 4 + 5 | 28 |
-| Chemistry | Atoms/Elements/Periodic Table, Chemical Reactions | 4 + 4 | 28 |
-| Physics | Forces & Motion, Energy & Waves | 5 + 3 | 28 |
-| Earth & Space | Earth Systems & Climate, Solar System & Beyond | 4 + 4 | 28 |
+| Biology | Cells & Organisation, Ecology & Ecosystems | 4 + 5 | ~26 / ~6 / 9 |
+| Chemistry | Atoms/Elements/Periodic Table, Chemical Reactions | 4 + 4 | ~26 / ~2 / 8 |
+| Physics | Forces & Motion, Energy & Waves | 5 + 3 | ~26 / ~2 / 8 |
+| Earth & Space | Earth Systems & Climate, Solar System & Beyond | 4 + 4 | ~26 / ~2 / 8 |
+
+(Approximate band 1/2 split per area — exact counts depend on how many
+existing prompts happened to contain "why"; band 3 counts are exact,
+one per submodule.)
 
 Content is loosely based on NCEA Level 1 Science's four knowledge
 strands (Biology / Chemistry / Physics / Earth & Space Science). It is
@@ -162,14 +276,19 @@ strands (Biology / Chemistry / Physics / Earth & Space Science). It is
 inquiry-based internal standards (1.1, 1.2) don't fit a fact-recall
 quiz format, so they were deliberately left out in favour of
 knowledge-strand content. Worth flagging to the student/parent that
-this supplements but doesn't replace official NCEA assessment prep.
+this supplements but doesn't replace official NCEA assessment prep,
+and that the Achieved/Merit/Excellence bands here are a study aid
+loosely modelled on NCEA's grading language, not a certified mapping
+to actual standard-specific grade boundaries.
 
 ## Design system
 
 - Petrol/navy dark theme (`--bg: #12181F`), amber accent (`--accent:
   #F2B705`), soft per-area accent colours (biology green, chemistry
   blue, physics violet, earth orange) — all defined as CSS custom
-  properties on the root container in `Orbit`'s return statement.
+  properties on the root container in `Orbit`'s return statement. Band
+  UI reuses these same per-area accent colours (no separate band colour
+  scale) — bands are differentiated by label/badge, not hue.
 - Fraunces (serif, headings) + IBM Plex Sans (UI) + IBM Plex Mono
   (numbers/scores), loaded via Google Fonts — injected via JS in the
   sandbox build, via `<link>` in `index.html` for the PWA build.
@@ -185,13 +304,14 @@ this supplements but doesn't replace official NCEA assessment prep.
   in the build environment lacked the `rsvg-convert` delegate) — an
   atom mark (three orbits + nucleus) in the app's amber-on-petrol
   palette. Sizes: 192, 512, 512 maskable, 180 (apple-touch-icon), 32
-  (favicon).
+  (favicon). **Not regenerated in the v0.4.0 pass** — reuse the
+  existing icon files when merging this update in.
 - `sw.js`: cache-first for same-origin app-shell files, network-first
   falling back to cache for CDN assets (React/fonts). Cache name is
   `orbit-shell-v{APP_VERSION}` — **bump both `APP_VERSION` in
   `app.jsx` and the matching one in `sw.js` together** when shipping a
   content/logic update, or the service worker won't invalidate its
-  cache and users won't see the update.
+  cache and users won't see the update. Both are now `0.4.0`.
 - Deployment: any static host with HTTPS (GitHub Pages, Netlify,
   Cloudflare Pages). See `README.md` for install steps. Not deployed
   anywhere yet as of this writing — all testing so far has been via the
@@ -199,21 +319,20 @@ this supplements but doesn't replace official NCEA assessment prep.
 
 ## Known gaps / likely next steps
 
-- **Not yet deployed anywhere real.** Everything above about
-  `localStorage` persistence and offline caching is implemented but
-  untested outside the local file structure — worth a real device test
-  once hosted.
-- No automated check that content edits preserve question IDs (this
-  was discussed but not built — see "Question ID convention" above for
-  the manual rule in the meantime).
-- Chemistry/Physics/Earth & Space content hasn't had the same depth
-  pass Biology got first — all four areas are now structurally even
-  (submodules + 14 Qs/module) but worth a factual accuracy re-check
-  before relying on it for real study.
+- **Band content depth** — see "Known gap" under Difficulty bands
+  above. Merit is thin, Excellence is exactly one item deep per
+  submodule. Next content pass should even this out.
+- **Existing-question band tagging was heuristic** ("why" in the
+  prompt → Merit), not hand-reviewed. Worth a manual pass per area.
+- **Not yet deployed anywhere real.** `localStorage` persistence and
+  offline caching are implemented but untested outside the local file
+  structure — worth a real device test once hosted.
+- No automated check that content edits preserve question IDs (manual
+  rule only — see "Question ID convention" above).
 - No way to add a second subject yet through the UI — the data model
   supports it (`SUBJECTS` is already a dict), but `HomeScreen`
   currently hardcodes `SUBJECTS.science` rather than mapping over
   `SUBJECTS`. Trivial to fix when a second subject is actually added.
-- No settings for adjusting `MASTERY_THRESHOLD` or the EMA decay
-  weighting — both are hardcoded constants, deliberately not
-  user-configurable for now.
+- No settings for adjusting `MASTERY_THRESHOLD`, the EMA decay
+  weighting, or which band drives the "mastered" badge — all hardcoded
+  constants/decisions, deliberately not user-configurable for now.

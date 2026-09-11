@@ -10,6 +10,7 @@ just static hosting.
 - `manifest.json` — app name, icons, colours for the home-screen install
 - `sw.js` — service worker: caches the app so it opens offline
 - `icons/` — app icons (192, 512, maskable, Apple touch icon, favicon)
+  — not included in this update; carry over your existing icons folder
 
 ## Hosting it
 

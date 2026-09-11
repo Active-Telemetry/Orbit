@@ -1,7 +1,7 @@
 // Bump this whenever app.jsx (or anything else in the shell) changes.
 // A changed cache name is what makes the update actually take effect on
 // a user's phone — it's the same version number shown in Settings.
-const APP_VERSION = "0.3.0";
+const APP_VERSION = "0.4.0";
 const CACHE_NAME = `orbit-shell-v${APP_VERSION}`;
 
 const APP_SHELL = [
