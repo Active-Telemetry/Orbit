@@ -1,21 +1,38 @@
 # Orbit — Context & Handoff Notes
 
 A study app for NCEA Level 1 (NZ) subjects, built for a specific student.
-Currently: Science only. Designed so more subjects can be added later
-without restructuring.
+Currently: the four NCEA science-strand subjects (Biology, Chemistry,
+Physics, Earth & Space) — see "Current state" for how these used to be
+bundled under a single "Science" subject and were flattened out in
+v0.6.0. Designed so more subjects can be added later without
+restructuring.
 
 This file exists so a new chat can pick up work without re-deriving the
 decisions below. Read this before touching `app.jsx`.
 
 ## Current state
 
-- **Version:** 0.5.0 (in `APP_VERSION` in `app.jsx`, and matching
+- **Version:** 0.6.0 (in `APP_VERSION` in `app.jsx`, and matching
   `CACHE_NAME` in `sw.js`)
-- **Live now:** Science, all four areas (Biology, Chemistry, Physics,
-  Earth & Space), 8 modules, 33 submodules, 145 questions total, all
-  tagged with a difficulty band (see below)
+- **v0.6.0 flattened the subject hierarchy:** the old single `science`
+  subject wrapping four areas (Biology, Chemistry, Physics, Earth &
+  Space) as a middle layer is gone. Each former area is now its own
+  top-level entry in `SUBJECTS` — Home lists Biology/Chemistry/Physics/
+  Earth & Space directly, and tapping one goes straight to that
+  subject's module list (no more intermediate "choose an area" screen).
+  See "Data model" below for the new shape. `SCHEMA_VERSION` bumped to
+  `2` and `loadState`/`handleImport` run a one-time `migrateProgress()`
+  step that pulls old `progress.science.<areaId>.*` data back out to
+  `progress.<areaId>.*` so existing saved progress isn't lost.
+- **Live now:** Biology, Chemistry, Physics, Earth & Space as four
+  top-level subjects (content counts below are from before the v0.5.0
+  Physical Properties/genetics passes and the v0.6.0 flatten — see the
+  "Stale note" under Content coverage).
 - **Two parallel copies of the app exist** — see "Two builds" below.
   They should be kept in sync by hand; there's no shared source yet.
+  **Note:** this may itself be stale — only a single `app.jsx` exists at
+  the repo root as of this writing, not a `pwa/` folder plus
+  `study-app.jsx`; worth confirming next time this section is touched.
 
 ## Two builds
 
@@ -51,28 +68,33 @@ decisions below. Read this before touching `app.jsx`.
 
 ```
 SUBJECTS = {
-  science: {
-    id, name, tagline,
-    areas: [
+  biology: {
+    id, name, blurb, accent, available: bool,
+    modules: [
       {
-        id, name, blurb, accent, available: bool,
-        modules: [
+        id, name, blurb,
+        submodules: [
           {
             id, name, blurb,
-            submodules: [
-              {
-                id, name, blurb,
-                learn: [ { title, body, band, children: [...] } ],   // recursive tree
-                questions: [ { id, band, type: "mcq"|"text", prompt, options?, answer?, answers? } ],
-              },
-            ],
+            learn: [ { title, body, band, children: [...] } ],   // recursive tree
+            questions: [ { id, band, type: "mcq"|"text", prompt, options?, answer?, answers? } ],
           },
         ],
       },
     ],
   },
+  chemistry: { ... },
+  physics: { ... },
+  earthspace: { ... },
 }
 ```
+
+(Pre-v0.6.0, this was `SUBJECTS.science.areas[]`, with a `science`
+subject wrapping the four of these as areas. Flattened so each is now a
+top-level `SUBJECTS` entry — see "Current state" above. `HomeScreen` now
+maps over `Object.values(SUBJECTS)` instead of hardcoding
+`SUBJECTS.science`, so adding a genuinely new subject — Maths, English —
+is just adding another top-level key.)
 
 - `learn` nodes can nest arbitrarily via `children`, but in practice
   submodules currently use 1–2 top-level nodes with 2–4 children each,
@@ -156,10 +178,12 @@ density) is the natural next step, area by area.
   Merit/Excellence scores are shown alongside as three small per-band
   rings per row, but don't affect the checkmark.
 - The overall (non-band) `submoduleScore()` / `moduleScore()` /
-  `areaScore()` / `subjectScore()` functions were kept, now defined as
-  the average of whichever bands have content (via a shared `avg()`
-  helper) — used for the coarse rings on Home/Area/Module screens where
-  a single number is more useful than three.
+  `subjectScore()` functions were kept, now defined as the average of
+  whichever bands have content (via a shared `avg()` helper) — used for
+  the coarse rings on Home/Module screens where a single number is more
+  useful than three. (Pre-v0.6.0 there was also an `areaScore()` in
+  between `moduleScore()` and `subjectScore()`; it's gone now that
+  subject and area are the same thing — see "Current state".)
 
 ## Question ID convention — READ BEFORE EDITING CONTENT
 
@@ -169,17 +193,24 @@ Question IDs follow `{moduleId}_q{n}`, e.g. `cells_q1`...`cells_q18`
 band.**
 
 ```
-state.progress[subjectId][areaId][moduleId].questionStats["cells_q1"]
+state.progress[subjectId][moduleId].questionStats["cells_q1"]
   = { seen, correct, ema }
 ```
+
+(Pre-v0.6.0 this was `state.progress[subjectId][areaId][moduleId]`,
+with `subjectId` always `"science"` — see "Current state" above for the
+flatten and the progress migration this required.)
 
 **Rules for future content edits (unchanged, still apply):**
 - Adding new questions: always use the next free `_qN` number. Never
   reuse or renumber existing IDs.
 - Removing a question: just stop referencing its ID in the content
   tree. The orphaned stat sits harmlessly unused.
-- Renaming a `subject`/`area`/`module` `id` (not `name`) breaks
-  existing saved progress for that branch. Change `name`, not `id`.
+- Renaming a `subject`/`module` `id` (not `name`) breaks existing saved
+  progress for that branch. Change `name`, not `id`. (There's no
+  separate `area` level any more as of v0.6.0 — each former area's `id`
+  is now the subject's own `id`, so the same rule just applies one
+  level up the path than it used to.)
 - Submodule `id`s are not part of the progress key path, so they're
   safe to rename/reorganise freely.
 - **Changing a question's `band` after the fact is safe** — it just
@@ -340,10 +371,12 @@ to actual standard-specific grade boundaries.
   structure — worth a real device test once hosted.
 - No automated check that content edits preserve question IDs (manual
   rule only — see "Question ID convention" above).
-- No way to add a second subject yet through the UI — the data model
-  supports it (`SUBJECTS` is already a dict), but `HomeScreen`
-  currently hardcodes `SUBJECTS.science` rather than mapping over
-  `SUBJECTS`. Trivial to fix when a second subject is actually added.
+- ~~No way to add a second subject yet through the UI...~~ **Fixed in
+  v0.6.0** — `HomeScreen` now maps over `Object.values(SUBJECTS)`
+  instead of hardcoding `SUBJECTS.science`, as part of the area-flatten
+  described under "Current state". Adding a real additional subject
+  (Maths, English, ...) is now just adding another top-level `SUBJECTS`
+  key with `available: true`.
 - No settings for adjusting `MASTERY_THRESHOLD`, the EMA decay
   weighting, or which band drives the "mastered" badge — all hardcoded
   constants/decisions, deliberately not user-configurable for now.
