@@ -2006,6 +2006,83 @@ const SUBJECTS = {
               },
             ],
           },
+          {
+            id: "physical-properties",
+            name: "Physical Properties",
+            blurb: "Particle arrangement, bonding, and how physical properties inform material use (AS92023)",
+            submodules: [
+              {
+                id: "prop-solids",
+                name: "Types of Solids & Properties",
+                blurb: "Ionic, metallic, molecular, network solids, and polymers",
+                learn: [
+                  {
+                    band: 1,
+                    title: "The core principle of physical properties",
+                    body: "Physical properties depend directly on particle arrangement, bonding type, and the relative strength of attractive forces between particles.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Why particle forces matter",
+                        body: "Stronger attractive forces require more energy or force to separate particles, leading to higher melting points and hardness. Weaker forces mean less energy is needed.",
+                      },
+                      {
+                        band: 2,
+                        title: "Mobile charge carriers",
+                        body: "Electrical conductivity requires charged particles that are free to move, such as delocalised electrons in metals or mobile ions in molten/aqueous ionic substances.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 3,
+                    title: "Evaluating structural suitability",
+                    body: "An Excellence-level explanation connects the physical property to particle arrangement, bonding type, and relative force strength to justify why a material is suitable for a specific use.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "prop_q1",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "What factor primarily determines the physical properties of a material?",
+                    options: [
+                      "Its color in daylight",
+                      "Particle arrangement and attractive forces",
+                      "The temperature of the room",
+                      "How it reacts chemically with acids",
+                    ],
+                    answer: "Particle arrangement and attractive forces",
+                  },
+                  {
+                    id: "prop_q2",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why do substances with strong attractive forces generally have high melting points?",
+                    options: [
+                      "Because they contain no particles",
+                      "Because a large amount of energy is required to overcome the strong attractions",
+                      "Because they react with oxygen when heated",
+                      "Because their particles become heavier",
+                    ],
+                    answer: "Because a large amount of energy is required to overcome the strong attractions",
+                  },
+                  {
+                    id: "prop_q3",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "When evaluating why copper is suitable for electrical wiring, what complete causal chain should be included?",
+                    options: [
+                      "It is shiny, so electricity reflects through it",
+                      "Delocalised electrons carry charge, and non-directional metallic bonding allows ductility",
+                      "It has weak intermolecular forces that melt easily",
+                      "It forms a rigid 3D ionic lattice that shatters when pulled",
+                    ],
+                    answer: "Delocalised electrons carry charge, and non-directional metallic bonding allows ductility",
+                  },
+                ],
+              },
+            ],
+          },
         ],
       },
       {
