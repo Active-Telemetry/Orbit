@@ -1,4 +1,4 @@
-const { useState, useEffect, useCallback } = React;
+const { useState, useEffect, useCallback, useMemo } = React;
 
 /* ---------------------------------------------------------------------- */
 /* Minimal inline icon set (avoids an external icon-library dependency so */
@@ -100,7 +100,7 @@ const Lock = (p) => (
 /* App identity                                                           */
 /* ---------------------------------------------------------------------- */
 
-const APP_VERSION = "0.6.0";
+const APP_VERSION = "0.7.0";
 const SCHEMA_VERSION = 2;
 
 /* ---------------------------------------------------------------------- */
@@ -121,6 +121,57 @@ const BANDS = [
 
 function bandOf(item) {
   return item.band ?? 1;
+}
+
+/* Learn-mode pairing: facts and questions are two independently-authored
+   arrays per submodule, sharing only the `band` axis. There is no
+   hand-authored link between a specific fact and a specific question, so
+   Learn mode pairs them automatically, per band, by flattening each in
+   its existing array order and distributing questions across facts as
+   evenly as possible. This intentionally does not require any new
+   content-authoring pass across submodules. */
+
+function collectFactsByBand(learnNodes) {
+  const buckets = { 1: [], 2: [], 3: [] };
+  function walk(nodes) {
+    for (const node of nodes) {
+      const b = bandOf(node);
+      if (!buckets[b]) buckets[b] = [];
+      buckets[b].push(node);
+      if (node.children && node.children.length > 0) walk(node.children);
+    }
+  }
+  walk(learnNodes);
+  return buckets;
+}
+
+function distributeQuestions(facts, questions) {
+  const F = facts.length;
+  const Q = questions.length;
+  return facts.map((fact, i) => ({
+    fact,
+    questions: questions.slice(
+      Math.ceil((i * Q) / F),
+      Math.ceil(((i + 1) * Q) / F),
+    ),
+  }));
+}
+
+function buildLearnSteps(submodule, maxBand) {
+  const factsByBand = collectFactsByBand(submodule.learn);
+  const steps = [];
+  for (let level = 1; level <= maxBand; level++) {
+    const facts = factsByBand[level] || [];
+    const questions = submodule.questions.filter((q) => bandOf(q) === level);
+    for (const { fact, questions: qs } of distributeQuestions(
+      facts,
+      questions,
+    )) {
+      steps.push({ kind: "fact", node: fact });
+      for (const q of qs) steps.push({ kind: "question", question: q });
+    }
+  }
+  return steps;
 }
 
 /* ---------------------------------------------------------------------- */
@@ -5234,106 +5285,155 @@ function ModeChoiceScreen({
   );
 }
 
-function teaser(text, max = 78) {
-  if (!text) return "";
-  return text.length > max ? text.slice(0, max).trim() + "…" : text;
-}
-
-function LearnNode({ node, accent, depth, maxBand }) {
-  const [open, setOpen] = useState(false);
-  if (bandOf(node) > maxBand) return null;
-  const visibleChildren = (node.children || []).filter(
-    (c) => bandOf(c) <= maxBand,
+function LearnScreen({ subject, submodule, initialBand, onBack, onSettings }) {
+  const [maxBand, setMaxBand] = useState(initialBand || 1);
+  const steps = useMemo(
+    () => buildLearnSteps(submodule, maxBand),
+    [submodule, maxBand],
   );
-  const hasChildren = visibleChildren.length > 0;
-  return (
-    <div style={{ marginLeft: depth > 0 ? 16 : 0 }}>
-      <button
-        onClick={() => setOpen((o) => !o)}
-        style={{
-          ...styles.learnNodeBtn,
-          borderLeft: depth > 0 ? `2px solid var(--${accent})` : "none",
-          paddingLeft: depth > 0 ? 14 : 16,
-        }}
-      >
-        <div style={{ flex: 1, textAlign: "left" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            {bandOf(node) > 1 && (
-              <BandBadge level={bandOf(node)} accent={accent} />
-            )}
+  const [index, setIndex] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [textValue, setTextValue] = useState("");
+  const [answered, setAnswered] = useState(false);
+  const [wasCorrect, setWasCorrect] = useState(false);
+  // Local-only tally for the end-of-walkthrough recap. Never sent to
+  // recordSession / state.progress — Learn mode does not affect saved
+  // proficiency (Revise remains the only assessed mode).
+  const [results, setResults] = useState({});
+  const [done, setDone] = useState(false);
+
+  const step = steps[index] || null;
+
+  // Derived, not separately-reset state: `steps` is memoized on
+  // [submodule, maxBand], so `step` only changes identity when index or
+  // maxBand actually changes — this only reshuffles when the question
+  // genuinely changes, not on every keystroke/re-render.
+  const optionOrder = useMemo(() => {
+    if (step && step.kind === "question" && step.question.type === "mcq") {
+      return shuffle(step.question.options);
+    }
+    return [];
+  }, [step]);
+
+  const changeBand = (level) => {
+    setMaxBand(level);
+    setIndex(0);
+    setSelected(null);
+    setTextValue("");
+    setAnswered(false);
+    setWasCorrect(false);
+    setResults({});
+    setDone(false);
+  };
+
+  const selectAnswer = (opt) => {
+    if (answered) return;
+    const q = step.question;
+    const correct = opt === q.answer;
+    setSelected(opt);
+    setWasCorrect(correct);
+    setAnswered(true);
+    setResults((r) => ({ ...r, [q.id]: correct }));
+  };
+
+  const submitText = () => {
+    if (answered || !textValue.trim()) return;
+    const q = step.question;
+    const correct = isTextCorrect(textValue, q.answers);
+    setWasCorrect(correct);
+    setAnswered(true);
+    setResults((r) => ({ ...r, [q.id]: correct }));
+  };
+
+  const isLastStep = index + 1 >= steps.length;
+
+  const advance = () => {
+    if (isLastStep) {
+      setDone(true);
+      return;
+    }
+    setIndex((i) => i + 1);
+    setSelected(null);
+    setTextValue("");
+    setAnswered(false);
+    setWasCorrect(false);
+  };
+
+  const totalQuestions = steps.filter((s) => s.kind === "question").length;
+  const correctCount = Object.values(results).filter(Boolean).length;
+
+  if (done) {
+    return (
+      <div>
+        <Header
+          title={submodule.name}
+          subtitle="Learn complete"
+          onBack={onBack}
+          onSettings={onSettings}
+        />
+        <div style={{ padding: "24px 20px", textAlign: "center" }}>
+          {totalQuestions > 0 && (
             <div
               style={{
-                fontSize: depth === 0 ? 16 : 14.5,
-                fontWeight: 600,
-                color: "var(--ink)",
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: 18,
               }}
             >
-              {node.title}
+              <Ring
+                value={Math.round((correctCount / totalQuestions) * 100)}
+                size={90}
+                stroke={7}
+                color={`var(--${subject.accent})`}
+              />
             </div>
+          )}
+          <div
+            style={{
+              fontFamily: "'Fraunces', serif",
+              fontSize: 20,
+              fontWeight: 600,
+              color: "var(--ink)",
+            }}
+          >
+            {totalQuestions > 0
+              ? `${correctCount} of ${totalQuestions} correct`
+              : "All facts reviewed"}
           </div>
           <div
             style={{
               fontSize: 13.5,
               color: "var(--ink-dim)",
-              marginTop: 6,
-              lineHeight: 1.55,
+              marginTop: 8,
+              lineHeight: 1.5,
             }}
           >
-            {open ? node.body : teaser(node.body)}
+            This was just practice — it hasn't changed your proficiency
+            score. Head to Revise when you're ready for that to count.
           </div>
+          <button
+            onClick={onBack}
+            style={{ ...styles.primaryBtn, marginTop: 24, width: "100%" }}
+          >
+            Back to topic
+          </button>
         </div>
-        {hasChildren && (
-          <ChevronDown
-            size={16}
-            color="var(--ink-dim)"
-            style={{
-              transform: open ? "rotate(180deg)" : "none",
-              transition: "transform 0.2s",
-              flexShrink: 0,
-              marginTop: 3,
-            }}
-          />
-        )}
-      </button>
-      {open && hasChildren && (
-        <div
-          style={{
-            marginTop: 6,
-            display: "flex",
-            flexDirection: "column",
-            gap: 6,
-          }}
-        >
-          {visibleChildren.map((child, i) => (
-            <LearnNode
-              key={i}
-              node={child}
-              accent={accent}
-              depth={depth + 1}
-              maxBand={maxBand}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
+      </div>
+    );
+  }
 
-function LearnScreen({ subject, submodule, initialBand, onBack, onSettings }) {
-  const [maxBand, setMaxBand] = useState(initialBand || 1);
-  const visibleTopNodes = submodule.learn.filter((n) => bandOf(n) <= maxBand);
   return (
     <div>
       <Header
         title={submodule.name}
-        subtitle="Learn"
+        subtitle={`Step ${index + 1} of ${steps.length}`}
         onBack={onBack}
         onSettings={onSettings}
       />
       <div style={{ padding: "0 20px 8px" }}>
         <BandTabs
           selected={maxBand}
-          onSelect={setMaxBand}
+          onSelect={changeBand}
           accent={subject.accent}
         />
         <div
@@ -5344,27 +5444,175 @@ function LearnScreen({ subject, submodule, initialBand, onBack, onSettings }) {
             lineHeight: 1.4,
           }}
         >
-          Showing content up to {BANDS.find((b) => b.level === maxBand).label}{" "}
-          level
+          Covering content up to{" "}
+          {BANDS.find((b) => b.level === maxBand).label} level. Changing this
+          restarts the walkthrough.
         </div>
       </div>
-      <div
-        style={{
-          padding: "12px 20px 32px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-        }}
-      >
-        {visibleTopNodes.map((node, i) => (
-          <LearnNode
-            key={i}
-            node={node}
-            accent={subject.accent}
-            depth={0}
-            maxBand={maxBand}
-          />
-        ))}
+      <div style={{ padding: "12px 20px 32px" }}>
+        {step.kind === "fact" ? (
+          <div style={styles.learnFactCard}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              {bandOf(step.node) > 1 && (
+                <BandBadge level={bandOf(step.node)} accent={subject.accent} />
+              )}
+              <div
+                style={{
+                  fontFamily: "'Fraunces', serif",
+                  fontSize: 17,
+                  fontWeight: 600,
+                  color: "var(--ink)",
+                }}
+              >
+                {step.node.title}
+              </div>
+            </div>
+            <div
+              style={{
+                fontSize: 14,
+                color: "var(--ink-dim)",
+                marginTop: 10,
+                lineHeight: 1.6,
+              }}
+            >
+              {step.node.body}
+            </div>
+            <button
+              onClick={advance}
+              style={{ ...styles.primaryBtn, width: "100%", marginTop: 20 }}
+            >
+              {isLastStep ? "Finish" : "Continue"}
+            </button>
+          </div>
+        ) : (
+          <div>
+            {maxBand > 1 && (
+              <div style={{ marginBottom: 10 }}>
+                <BandBadge
+                  level={bandOf(step.question)}
+                  accent={subject.accent}
+                  size="lg"
+                />
+              </div>
+            )}
+            <div
+              style={{
+                fontFamily: "'Fraunces', serif",
+                fontSize: 19,
+                fontWeight: 600,
+                color: "var(--ink)",
+                lineHeight: 1.4,
+                marginBottom: 20,
+              }}
+            >
+              {step.question.prompt}
+            </div>
+            {step.question.type === "mcq" ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {optionOrder.map((opt) => {
+                  let bg = "var(--surface-raised)";
+                  let border = "var(--border)";
+                  let icon = null;
+                  if (answered) {
+                    if (opt === step.question.answer) {
+                      bg = "rgba(127, 209, 160, 0.12)";
+                      border = "var(--correct)";
+                      icon = <CheckCircle2 size={18} color="var(--correct)" />;
+                    } else if (opt === selected) {
+                      bg = "rgba(232, 115, 92, 0.12)";
+                      border = "var(--incorrect)";
+                      icon = <XCircle size={18} color="var(--incorrect)" />;
+                    }
+                  }
+                  return (
+                    <button
+                      key={opt}
+                      onClick={() => selectAnswer(opt)}
+                      disabled={answered}
+                      style={{
+                        ...styles.optionBtn,
+                        background: bg,
+                        borderColor: border,
+                        cursor: answered ? "default" : "pointer",
+                      }}
+                    >
+                      <span>{opt}</span>
+                      {icon}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <input
+                    type="text"
+                    value={textValue}
+                    onChange={(e) => setTextValue(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && submitText()}
+                    disabled={answered}
+                    placeholder="Type your answer"
+                    style={{
+                      ...styles.textInput,
+                      borderColor: answered
+                        ? wasCorrect
+                          ? "var(--correct)"
+                          : "var(--incorrect)"
+                        : "var(--border)",
+                      background: answered
+                        ? wasCorrect
+                          ? "rgba(127, 209, 160, 0.12)"
+                          : "rgba(232, 115, 92, 0.12)"
+                        : "var(--surface-raised)",
+                    }}
+                  />
+                  {!answered && (
+                    <button
+                      onClick={submitText}
+                      disabled={!textValue.trim()}
+                      style={{
+                        ...styles.primaryBtn,
+                        opacity: textValue.trim() ? 1 : 0.5,
+                        flexShrink: 0,
+                      }}
+                    >
+                      Check
+                    </button>
+                  )}
+                </div>
+                {answered && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      marginTop: 12,
+                    }}
+                  >
+                    {wasCorrect ? (
+                      <CheckCircle2 size={18} color="var(--correct)" />
+                    ) : (
+                      <XCircle size={18} color="var(--incorrect)" />
+                    )}
+                    <div style={{ fontSize: 13.5, color: "var(--ink-dim)" }}>
+                      {wasCorrect
+                        ? "Correct"
+                        : `Correct answer: ${step.question.answers[0]}`}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            {answered && (
+              <button
+                onClick={advance}
+                style={{ ...styles.primaryBtn, width: "100%", marginTop: 22 }}
+              >
+                {isLastStep ? "Finish" : "Continue"}
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -6197,16 +6445,12 @@ const styles = {
     gap: 14,
     cursor: "pointer",
   },
-  learnNodeBtn: {
+  learnFactCard: {
     width: "100%",
     background: "var(--surface)",
     border: "1px solid var(--border)",
-    borderRadius: 12,
-    padding: "13px 16px",
-    display: "flex",
-    alignItems: "flex-start",
-    gap: 10,
-    cursor: "pointer",
+    borderRadius: 14,
+    padding: "18px 18px 20px",
     textAlign: "left",
   },
   optionBtn: {

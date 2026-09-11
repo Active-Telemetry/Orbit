@@ -12,8 +12,46 @@ decisions below. Read this before touching `app.jsx`.
 
 ## Current state
 
-- **Version:** 0.6.0 (in `APP_VERSION` in `app.jsx`, and matching
+- **Version:** 0.7.0 (in `APP_VERSION` in `app.jsx`, and matching
   `CACHE_NAME` in `sw.js`)
+- **v0.7.0 turned Learn mode into an interleaved fact→question
+  stepper.** It used to be a static expandable accordion
+  (`LearnNode`/`teaser`, both now deleted) showing all of a submodule's
+  `learn` tree at once. Now `LearnScreen` walks through one step at a
+  time — a short fact, then zero or more of the submodule's `questions`
+  (the same question objects/bank Revise uses, answered inline with
+  identical immediate feedback), then Continue to the next fact.
+  - **Pairing is automatic, not hand-authored.** There's still no data
+    field linking a specific fact to a specific question (facts and
+    questions are two independent arrays per submodule, sharing only a
+    `band` tag) — `collectFactsByBand()` buckets `learn` nodes by band
+    via a depth-first walk, `distributeQuestions()` spreads that band's
+    questions across that band's facts as evenly as possible
+    (`ceil(i·Q/F)` slice boundaries), and `buildLearnSteps()` composes
+    both into the flat step list `LearnScreen` steps through. This
+    recomputes fresh from whatever's in `SUBJECTS` every time — nothing
+    is persisted about the pairing, so it needs zero upkeep as content
+    is added/changed, though *which* fact a given question lands under
+    can shift when nearby content changes (harmless, since nothing
+    depends on that).
+  - **Fact:question ratio is skewed, unevenly, per band** — this is
+    exactly why an even-distribution formula was needed rather than
+    naive 1:1 pairing: band 1 has few facts but many questions per
+    submodule (e.g. `atoms-bonding`: 1 fact, 6 questions — all 6 show as
+    consecutive question-steps after that one fact), band 2 has many
+    facts but often *zero* questions (e.g. `cells-basics`: 4 facts, 0
+    questions — those facts just show with a plain Continue button, no
+    question step), band 3 is close to 1:1.
+  - **Learn-mode answers do NOT touch `state.progress`/`questionStats`.**
+    Revise remains the only assessed mode. Learn keeps a local,
+    non-persisted tally (`results` component state) shown as an
+    informal recap ("N of M correct... this didn't change your
+    proficiency score") at the end of the walkthrough. `SCHEMA_VERSION`
+    did NOT need to bump for this — nothing about the progress shape
+    changed, unlike the v0.6.0 flatten below.
+  - `styles.learnNodeBtn` (a clickable accordion row) was renamed to
+    `styles.learnFactCard` (a static card) since the new fact display
+    isn't a button.
 - **v0.6.0 flattened the subject hierarchy:** the old single `science`
   subject wrapping four areas (Biology, Chemistry, Physics, Earth &
   Space) as a middle layer is gone. Each former area is now its own
@@ -127,10 +165,12 @@ handled previously.
 **How bands behave differs between Learn and Revise, by design:**
 
 - **Learn mode is cumulative.** `LearnScreen` holds a `maxBand` state
-  (via `BandTabs`, single-select) and shows every node with
-  `band <= maxBand`. Selecting "Merit" shows Achieved + Merit content;
+  (via `BandTabs`, single-select) and steps through every node with
+  `band <= maxBand` (interleaved with questions — see the v0.7.0 note
+  above). Selecting "Merit" includes Achieved + Merit content;
   Excellence adds the rest. This matches how the concepts actually
-  build on each other.
+  build on each other. Changing the band tab regenerates the step list
+  and restarts the walkthrough from step 1.
 - **Revise mode is exclusive and multi-select.** Before a Revise
   session starts, `ReviseSetupScreen` shows `BandCheckboxes` — the
   student ticks exactly which band(s) they want questions from (all
@@ -245,16 +285,17 @@ flatten and the progress migration this required.)
 ## Screen flow
 
 ```
-Home → Areas → Modules → Submodule checklist → Learn | Revise
-                                              ↳ Learn: band tabs (cumulative),
-                                                opens on whichever band was
-                                                selected on the Mode screen
-                                              ↳ Revise: band checkboxes (exclusive,
-                                                multi-select) → quiz session
-                                              ↳ "Revise this whole module"
-                                                (pools all submodules' questions,
-                                                 same band-checkbox step,
-                                                 submoduleId: "ALL")
+Home → Modules → Submodule checklist → Learn | Revise
+                                      ↳ Learn: band tabs (cumulative),
+                                        opens on whichever band was
+                                        selected on the Mode screen, steps
+                                        through fact→question(s)→fact...
+                                      ↳ Revise: band checkboxes (exclusive,
+                                        multi-select) → quiz session
+                                        ↳ "Revise this whole module"
+                                          (pools all submodules' questions,
+                                           same band-checkbox step,
+                                           submoduleId: "ALL")
 ```
 
 New screen added in v0.4.0: **`revise-setup`**, which sits between the
