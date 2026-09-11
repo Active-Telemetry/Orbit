@@ -100,7 +100,7 @@ const Lock = (p) => (
 /* App identity                                                           */
 /* ---------------------------------------------------------------------- */
 
-const APP_VERSION = "0.4.0";
+const APP_VERSION = "0.5.0";
 const SCHEMA_VERSION = 1;
 
 /* ---------------------------------------------------------------------- */
@@ -2012,14 +2012,14 @@ const SUBJECTS = {
             blurb: "Particle arrangement, bonding, and how physical properties inform material use (AS92023)",
             submodules: [
               {
-                id: "prop-solids",
-                name: "Types of Solids & Properties",
-                blurb: "Ionic, metallic, molecular, network solids, and polymers",
+                id: "prop-intro",
+                name: "Physical Properties & the Five Types of Solids",
+                blurb: "The core idea linking particles, bonding, and material behaviour",
                 learn: [
                   {
                     band: 1,
                     title: "The core principle of physical properties",
-                    body: "Physical properties depend directly on particle arrangement, bonding type, and the relative strength of attractive forces between particles.",
+                    body: "Physical properties depend directly on particle arrangement, bonding type, and the relative strength of attractive forces between particles: PHYSICAL PROPERTY -> PARTICLE ARRANGEMENT/STRUCTURE -> ATTRACTIVE FORCES/BONDING -> BEHAVIOUR AND USE.",
                     children: [
                       {
                         band: 2,
@@ -2034,9 +2034,33 @@ const SUBJECTS = {
                     ],
                   },
                   {
+                    band: 1,
+                    title: "What is a physical property?",
+                    body: "A physical property is a characteristic that can be observed or measured without changing what the substance actually is chemically — density, melting point, hardness, and solubility are all physical properties.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Physical change vs chemical change",
+                        body: "Melting, dissolving, bending, and cutting are physical changes — no new substance is formed. A physical property is what you can observe or measure; a chemical property is how a substance reacts to form new substances.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 1,
+                    title: "Five main types of solid",
+                    body: "Almost every material fits one of five categories: ionic solids, metallic solids, covalent molecular substances, covalent network solids, and polymers — each with its own typical particles, bonding, and properties.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Comparing the five types",
+                        body: "Ionic and covalent network solids tend to have very high melting points from strong bonding throughout a rigid structure. Metals conduct electricity and heat well because of delocalised electrons. Molecular substances and polymers are held together internally by strong covalent bonds but only weak forces between molecules/chains, giving low melting points and flexibility.",
+                      },
+                    ],
+                  },
+                  {
                     band: 3,
                     title: "Evaluating structural suitability",
-                    body: "An Excellence-level explanation connects the physical property to particle arrangement, bonding type, and relative force strength to justify why a material is suitable for a specific use.",
+                    body: "An Excellence-level explanation connects the physical property to particle arrangement, bonding type, and relative force strength to justify why a material is suitable for a specific use, and compares it against alternatives where appropriate.",
                   },
                 ],
                 questions: [
@@ -2054,6 +2078,32 @@ const SUBJECTS = {
                     answer: "Particle arrangement and attractive forces",
                   },
                   {
+                    id: "prop_q4",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "Which of the following best describes a physical change?",
+                    options: [
+                      "It always produces a new chemical substance",
+                      "It does not produce a new chemical substance",
+                      "It can only happen to gases",
+                      "It always requires a chemical reaction",
+                    ],
+                    answer: "It does not produce a new chemical substance",
+                  },
+                  {
+                    id: "prop_q5",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "Which of these is NOT one of the five main types of solid covered by this topic?",
+                    options: [
+                      "Ionic solids",
+                      "Metallic solids",
+                      "Elemental solids",
+                      "Polymers",
+                    ],
+                    answer: "Elemental solids",
+                  },
+                  {
                     id: "prop_q2",
                     band: 2,
                     type: "mcq",
@@ -2067,6 +2117,19 @@ const SUBJECTS = {
                     answer: "Because a large amount of energy is required to overcome the strong attractions",
                   },
                   {
+                    id: "prop_q6",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Which pair of materials both generally have very high melting points because of strong bonding extending throughout a rigid structure?",
+                    options: [
+                      "Ionic solids and molecular substances",
+                      "Ionic solids and covalent network solids",
+                      "Molecular substances and polymers",
+                      "Polymers and molecular substances",
+                    ],
+                    answer: "Ionic solids and covalent network solids",
+                  },
+                  {
                     id: "prop_q3",
                     band: 3,
                     type: "mcq",
@@ -2078,6 +2141,712 @@ const SUBJECTS = {
                       "It forms a rigid 3D ionic lattice that shatters when pulled",
                     ],
                     answer: "Delocalised electrons carry charge, and non-directional metallic bonding allows ductility",
+                  },
+                  {
+                    id: "prop_q7",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "Which of these best justifies choosing a covalent network solid such as SiO2 over a molecular substance for an application requiring high hardness?",
+                    options: [
+                      "Covalent network solids have strong covalent bonds extending throughout the whole structure, so far more energy is needed to break or deform them than the weak intermolecular forces in molecular substances",
+                      "Covalent network solids are always electrical conductors, which makes them harder",
+                      "Molecular substances have stronger covalent bonds than covalent network solids",
+                      "Both materials have identical bonding, so the choice doesn't matter",
+                    ],
+                    answer: "Covalent network solids have strong covalent bonds extending throughout the whole structure, so far more energy is needed to break or deform them than the weak intermolecular forces in molecular substances",
+                  },
+                ],
+              },
+              {
+                id: "prop-ionic",
+                name: "Ionic Solids",
+                blurb: "Ions, lattices, and why ionic solids behave the way they do",
+                learn: [
+                  {
+                    band: 1,
+                    title: "Ionic structure and bonding",
+                    body: "Ionic solids form a giant, regular 3D lattice of positive ions (cations) and negative ions (anions), held together by strong electrostatic attraction — the ionic bond. NaCl is a lattice of ions, never a collection of separate NaCl molecules.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Why ionic solids have high melting points",
+                        body: "Strong electrostatic attractions between oppositely charged ions hold the lattice together, so a large amount of heat energy is needed to separate the ions — giving ionic solids like NaCl (melting point ~801°C) high melting points.",
+                      },
+                      {
+                        band: 2,
+                        title: "Why ionic solids are hard but brittle",
+                        body: "The rigid lattice resists deformation, making ionic solids hard. But if force shifts a layer of ions, ions of the same charge can end up next to each other; like charges repel, cracking the lattice — so ionic solids are brittle rather than malleable.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 1,
+                    title: "Electrical conductivity and solubility",
+                    body: "Solid ionic compounds do not conduct electricity, but molten or dissolved ionic compounds do — because the mobility of the ions is what changes, not their charge.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Conductivity depends on ion mobility",
+                        body: "In a solid, ions are fixed in the lattice and cannot carry charge. Melting or dissolving frees the ions to move, so they can carry current — this is why NaCl(s) does not conduct but NaCl(aq) does.",
+                      },
+                      {
+                        band: 2,
+                        title: "Why many ionic solids dissolve in water",
+                        body: "Water is polar: the oxygen end attracts cations and the hydrogen ends attract anions. When these water-ion attractions are strong enough to overcome the attractions within the lattice, ions are pulled free and surrounded by water molecules.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 3,
+                    title: "Evaluating ionic solids for a use",
+                    body: "Titanium dioxide (TiO2) is hard enough to resist scratching in lenses, because its strong ionic lattice resists deformation — but a hard impact can still shatter it, because shifting ion layers brings like charges together and they repel. A full evaluation names both the useful property and its limitation.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "prop_q8",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "Ionic solids such as NaCl are best described as consisting of:",
+                    options: [
+                      "Individual NaCl molecules",
+                      "A giant lattice of positive and negative ions",
+                      "A sea of delocalised electrons around metal cations",
+                      "Long covalently bonded chains",
+                    ],
+                    answer: "A giant lattice of positive and negative ions",
+                  },
+                  {
+                    id: "prop_q9",
+                    band: 1,
+                    type: "text",
+                    prompt: "What is the general term for a positively charged ion?",
+                    answers: ["cation", "cations"],
+                  },
+                  {
+                    id: "prop_q10",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "Solid ionic compounds such as NaCl do not conduct electricity because:",
+                    options: [
+                      "They contain no charged particles at all",
+                      "Their ions are fixed in place in the lattice and cannot move",
+                      "They are covalently bonded",
+                      "Their delocalised electrons repel each other",
+                    ],
+                    answer: "Their ions are fixed in place in the lattice and cannot move",
+                  },
+                  {
+                    id: "prop_q11",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why do ionic solids generally have high melting points?",
+                    options: [
+                      "Strong electrostatic attraction between oppositely charged ions requires a lot of energy to overcome",
+                      "Their covalent bonds are very weak",
+                      "They contain delocalised electrons that resist heating",
+                      "Their intermolecular forces are unusually strong",
+                    ],
+                    answer: "Strong electrostatic attraction between oppositely charged ions requires a lot of energy to overcome",
+                  },
+                  {
+                    id: "prop_q12",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why are ionic solids brittle rather than malleable?",
+                    options: [
+                      "Applying force shifts layers of ions so like charges become adjacent and repel, shattering the lattice",
+                      "Their delocalised electrons move away when force is applied",
+                      "Their covalent bonds break instantly under any force",
+                      "They have no charged particles to hold the lattice together",
+                    ],
+                    answer: "Applying force shifts layers of ions so like charges become adjacent and repel, shattering the lattice",
+                  },
+                  {
+                    id: "prop_q13",
+                    band: 2,
+                    type: "text",
+                    prompt: "What term describes a substance or solution containing mobile ions that can conduct electricity?",
+                    answers: ["electrolyte", "electrolytes"],
+                  },
+                  {
+                    id: "prop_q14",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "Molten NaCl conducts electricity but solid NaCl does not, because:",
+                    options: [
+                      "Melting disrupts the rigid lattice so the ions become free to move and carry charge, while in the solid the ions remain fixed",
+                      "Melting turns the ions into delocalised electrons",
+                      "Molten NaCl becomes a covalent molecular substance",
+                      "Solid NaCl contains no ions at all",
+                    ],
+                    answer: "Melting disrupts the rigid lattice so the ions become free to move and carry charge, while in the solid the ions remain fixed",
+                  },
+                  {
+                    id: "prop_q15",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "Titanium dioxide (TiO2) is hard enough to resist scratching in lenses, but a strong impact can shatter it. This is best explained by:",
+                    options: [
+                      "The strong ionic lattice resists deformation, giving hardness, but an impact can shift ion layers so like charges align and repel, causing brittleness",
+                      "TiO2 has weak intermolecular forces that make it soft",
+                      "TiO2 contains delocalised electrons that make it ductile",
+                      "TiO2 is a molecular substance with strong covalent bonds only",
+                    ],
+                    answer: "The strong ionic lattice resists deformation, giving hardness, but an impact can shift ion layers so like charges align and repel, causing brittleness",
+                  },
+                ],
+              },
+              {
+                id: "prop-metallic",
+                name: "Metallic Solids & Alloys",
+                blurb: "Delocalised electrons, non-directional bonding, and why alloys differ from pure metals",
+                learn: [
+                  {
+                    band: 1,
+                    title: "Metallic structure and bonding",
+                    body: "Metals form a giant 3D lattice of positive metal cations surrounded by a 'sea' of delocalised electrons. The metallic bond — strong electrostatic attraction between cations and delocalised electrons — is non-directional, unlike the fixed directions of an ionic lattice.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Why metals conduct electricity and heat well",
+                        body: "Delocalised electrons are free to move through the whole structure. An applied voltage makes them flow, carrying charge; when heated, they transfer kinetic energy rapidly through the metal — giving metals excellent electrical and thermal conductivity.",
+                      },
+                      {
+                        band: 2,
+                        title: "Why metals are malleable and ductile",
+                        body: "Because metallic bonding is non-directional, layers of metal ions can slide past each other under force while the delocalised electrons keep attracting them — so metals bend into sheets (malleable) or draw into wire (ductile) instead of shattering.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 1,
+                    title: "Alloys",
+                    body: "An alloy is a mixture of a metal with one or more other elements (metal or non-metal), such as brass (copper + zinc) or steel (iron + carbon). Alloys keep metallic bonding, but the different-sized atoms disrupt the regular lattice.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Why alloys are harder than pure metals",
+                        body: "Different-sized atoms distort the regular metallic lattice, so layers cannot slide past each other as easily as in a pure metal. This means more force is needed to deform the structure — alloys are generally harder and stronger, but less malleable and ductile.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 3,
+                    title: "Choosing metals and alloys for a purpose",
+                    body: "Selecting a metal or alloy means weighing multiple properties against the use: e.g. an aluminium-magnesium alloy suits a strong, lightweight phone case better than aluminium-gold, because magnesium is both harder and far less dense than gold. Copper suits electrical wiring because ductility, conductivity, and a high melting point are all needed together.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "prop_q16",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "The structure of a metal is best described as:",
+                    options: [
+                      "Positive metal ions in a lattice, surrounded by a sea of delocalised electrons",
+                      "Discrete molecules held by weak intermolecular forces",
+                      "A giant lattice of positive and negative ions",
+                      "Long chains of covalently bonded monomers",
+                    ],
+                    answer: "Positive metal ions in a lattice, surrounded by a sea of delocalised electrons",
+                  },
+                  {
+                    id: "prop_q17",
+                    band: 1,
+                    type: "text",
+                    prompt: "What is the term for a mixture of a metal with one or more other elements?",
+                    answers: ["alloy", "alloys"],
+                  },
+                  {
+                    id: "prop_q18",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "Which property describes a metal's ability to be drawn into a long, thin wire without breaking?",
+                    options: ["Malleability", "Ductility", "Lustre", "Sonority"],
+                    answer: "Ductility",
+                  },
+                  {
+                    id: "prop_q19",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why are metals excellent electrical conductors?",
+                    options: [
+                      "Delocalised electrons are free to move through the structure and carry charge",
+                      "Metal ions themselves move freely to carry charge",
+                      "Metallic bonds are directional, forcing current one way",
+                      "Metals contain mobile anions",
+                    ],
+                    answer: "Delocalised electrons are free to move through the structure and carry charge",
+                  },
+                  {
+                    id: "prop_q20",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why can metals be hammered into shape without shattering?",
+                    options: [
+                      "Metallic bonds are non-directional, so layers of ions can slide while the delocalised electrons continue to attract them",
+                      "Ionic bonds allow layers to shift without repulsion",
+                      "Metals have no attractive forces between particles",
+                      "Metal atoms are not arranged in a lattice",
+                    ],
+                    answer: "Metallic bonds are non-directional, so layers of ions can slide while the delocalised electrons continue to attract them",
+                  },
+                  {
+                    id: "prop_q21",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why are alloys generally harder and less ductile than the pure metal they're made from?",
+                    options: [
+                      "Different-sized atoms distort the regular lattice, so layers cannot slide past each other as easily",
+                      "Alloys contain covalent bonds instead of metallic bonds",
+                      "Alloys have no delocalised electrons",
+                      "Alloys are always ionic compounds",
+                    ],
+                    answer: "Different-sized atoms distort the regular lattice, so layers cannot slide past each other as easily",
+                  },
+                  {
+                    id: "prop_q22",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "A phone case needs to be strong and lightweight. Aluminium (density 2.7 g/cm3, hardness 2.75 Mohs) could be alloyed with magnesium (density 1.7 g/cm3, hardness 3.0 Mohs) or gold (density 19.3 g/cm3, hardness 2.5 Mohs). Which is the better choice, and why?",
+                    options: [
+                      "Aluminium-magnesium, because magnesium is both harder and much less dense than gold",
+                      "Aluminium-gold, because gold is always the strongest metal",
+                      "Aluminium-magnesium, because magnesium is a non-metal",
+                      "Aluminium-gold, because density does not matter for phone cases",
+                    ],
+                    answer: "Aluminium-magnesium, because magnesium is both harder and much less dense than gold",
+                  },
+                  {
+                    id: "prop_q23",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "Which set of reasons best explains why copper is highly suitable for long-lasting electrical wiring?",
+                    options: [
+                      "Delocalised electrons give high electrical conductivity, non-directional metallic bonding gives ductility, and strong metallic bonding gives a high melting point",
+                      "Copper is an ionic solid that dissolves easily in water",
+                      "Copper has weak intermolecular forces that make it flexible",
+                      "Copper is a covalent network solid like diamond",
+                    ],
+                    answer: "Delocalised electrons give high electrical conductivity, non-directional metallic bonding gives ductility, and strong metallic bonding gives a high melting point",
+                  },
+                ],
+              },
+              {
+                id: "prop-molecular",
+                name: "Molecular Substances",
+                blurb: "Discrete molecules, weak intermolecular forces, and why that means low melting points",
+                learn: [
+                  {
+                    band: 1,
+                    title: "Molecular structure and bonding",
+                    body: "A molecular substance is made of discrete molecules. Strong covalent bonds hold atoms together within each molecule (intramolecular), but only weak intermolecular forces act between neighbouring molecules.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Why molecular substances have low melting and boiling points",
+                        body: "Melting and boiling mainly overcome the weak intermolecular forces between molecules — the strong covalent bonds within each molecule stay intact. Since little energy is needed to overcome weak intermolecular forces, melting and boiling points are relatively low.",
+                      },
+                      {
+                        band: 2,
+                        title: "Why molecular substances don't conduct electricity",
+                        body: "Electrons are held within covalent bonds inside each molecule. There are no delocalised electrons and no mobile ions, so there is no charge carrier available — molecular substances are generally electrical insulators.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 1,
+                    title: "Volatility and solubility",
+                    body: "Volatility (readily evaporating) and solubility in water both depend on how strong the interactions between molecules — and between molecules and water — actually are.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Volatility",
+                        body: "Weak intermolecular forces mean only a small amount of energy is needed for a molecule to escape the liquid surface, so substances like ethanol evaporate readily — this is why ethanol is volatile.",
+                      },
+                      {
+                        band: 2,
+                        title: "Solubility depends on the molecule",
+                        body: "A molecular substance dissolves when water-solute attractions are strong enough to overcome water-water and solute-solute attractions — true for polar molecules like ethanol, but not for oil, where water-water attractions stay stronger and oil forms a separate layer.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 3,
+                    title: "Evaluating molecular substances for a use",
+                    body: "To form a barrier that stays separate from boiling water, oil (a molecular substance) works better than salt (an ionic solid) — oil's weak attraction to water is not enough to dissolve it, while water strongly attracts and separates salt's ions. Ethanol's volatility makes it useful in hand sanitiser because it evaporates rather than lingering on skin.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "prop_q24",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "A molecular substance such as water or iodine consists of:",
+                    options: [
+                      "A giant lattice of ions",
+                      "Discrete molecules held together within by strong covalent bonds, and between by weak intermolecular forces",
+                      "Metal cations surrounded by delocalised electrons",
+                      "Long chains of repeating monomers",
+                    ],
+                    answer: "Discrete molecules held together within by strong covalent bonds, and between by weak intermolecular forces",
+                  },
+                  {
+                    id: "prop_q25",
+                    band: 1,
+                    type: "text",
+                    prompt: "What term describes forces that act BETWEEN molecules, rather than within them?",
+                    answers: ["intermolecular", "intermolecular forces"],
+                  },
+                  {
+                    id: "prop_q26",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "Which property is typical of molecular substances such as water and iodine?",
+                    options: [
+                      "High electrical conductivity as solids",
+                      "Low melting and boiling points",
+                      "Extreme hardness",
+                      "High density in every case",
+                    ],
+                    answer: "Low melting and boiling points",
+                  },
+                  {
+                    id: "prop_q27",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why do molecular substances generally have low melting points, even though the covalent bonds within each molecule are strong?",
+                    options: [
+                      "Melting only needs to overcome the weak intermolecular forces between molecules, not break the covalent bonds",
+                      "Melting breaks the strong covalent bonds within each molecule",
+                      "Molecular substances contain no attractive forces at all",
+                      "Molecular substances are always gases at room temperature",
+                    ],
+                    answer: "Melting only needs to overcome the weak intermolecular forces between molecules, not break the covalent bonds",
+                  },
+                  {
+                    id: "prop_q28",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why is ethanol volatile?",
+                    options: [
+                      "Weak intermolecular forces mean only a small amount of energy is needed for molecules to escape the liquid and evaporate",
+                      "Its strong covalent bonds break easily at room temperature",
+                      "It has delocalised electrons that push molecules apart",
+                      "It forms a rigid ionic lattice that decomposes readily",
+                    ],
+                    answer: "Weak intermolecular forces mean only a small amount of energy is needed for molecules to escape the liquid and evaporate",
+                  },
+                  {
+                    id: "prop_q29",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why are molecular substances generally poor electrical conductors?",
+                    options: [
+                      "Electrons are held within covalent bonds inside each molecule, so there are no mobile ions or delocalised electrons to carry charge",
+                      "Molecular substances contain too many delocalised electrons",
+                      "Their intermolecular forces carry electrical charge instead",
+                      "They are always ionic when dissolved in water",
+                    ],
+                    answer: "Electrons are held within covalent bonds inside each molecule, so there are no mobile ions or delocalised electrons to carry charge",
+                  },
+                  {
+                    id: "prop_q30",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "To make a barrier that stays on top of boiling water in a pot, would salt (NaCl) or cooking oil work better, and why?",
+                    options: [
+                      "Oil, because as a molecular substance its attraction to water is too weak to overcome water-water attractions, so it stays separate; salt dissolves because water strongly attracts its ions",
+                      "Salt, because ionic solids never interact with water",
+                      "Oil, because it is an ionic solid that resists dissolving",
+                      "Salt, because its covalent bonds repel water molecules",
+                    ],
+                    answer: "Oil, because as a molecular substance its attraction to water is too weak to overcome water-water attractions, so it stays separate; salt dissolves because water strongly attracts its ions",
+                  },
+                  {
+                    id: "prop_q31",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "Bitumen (a very large molecular substance) has a higher melting range (120-150°C) than small molecular substances like water. This is best explained by:",
+                    options: [
+                      "Each individual intermolecular attraction is still weak, but the huge size of the molecule means there are far more of them acting together, so more energy is needed to separate molecules",
+                      "Bitumen's covalent bonds are broken during melting, unlike water's",
+                      "Bitumen is actually an ionic solid, not a molecular substance",
+                      "Bitumen has delocalised electrons that raise its melting point",
+                    ],
+                    answer: "Each individual intermolecular attraction is still weak, but the huge size of the molecule means there are far more of them acting together, so more energy is needed to separate molecules",
+                  },
+                ],
+              },
+              {
+                id: "prop-network",
+                name: "Covalent Network Solids",
+                blurb: "Diamond, graphite, and SiO2 — giant covalent structures with very different properties",
+                learn: [
+                  {
+                    band: 1,
+                    title: "Diamond and graphite: two forms of carbon",
+                    body: "Diamond and graphite are both giant covalent networks made only of carbon, but the atoms are arranged differently: diamond bonds each carbon to four others in a 3D network, while graphite bonds each carbon to three others in 2D layers, leaving one electron per carbon delocalised.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Why diamond is extremely hard and does not conduct",
+                        body: "Strong covalent bonds extend throughout diamond's 3D network, so a very large amount of force is needed to break or deform it — extreme hardness. All four valence electrons per carbon are used in bonds, so there are no delocalised electrons and diamond does not conduct electricity.",
+                      },
+                      {
+                        band: 2,
+                        title: "Why graphite is soft, slippery, and conducts electricity",
+                        body: "Within each layer, covalent bonds are strong, but the forces between layers are weak, so layers slide over one another easily — making graphite soft and a good lubricant. Each carbon's delocalised electron can move through the layers, so graphite conducts electricity, unlike diamond.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 1,
+                    title: "Silicon dioxide (SiO2)",
+                    body: "Silicon dioxide is a 3D covalent network of silicon and oxygen atoms joined by strong covalent bonds throughout. Like diamond, it is very hard, has a very high melting point (~1700°C), is insoluble in water, and does not conduct electricity. It's a major component of sand and concrete.",
+                  },
+                  {
+                    band: 3,
+                    title: "Choosing between covalent network solids",
+                    body: "Concrete (containing SiO2) is chosen over bitumen for heavy-duty roads because SiO2's rigid 3D covalent network makes it far harder and gives it a much higher melting point than a molecular substance held together mainly by weak intermolecular forces. Diamond suits cutting tools because of its extreme hardness; graphite suits lubricants and pencils because its layers slide and it conducts electricity.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "prop_q32",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "In diamond, each carbon atom is covalently bonded to how many other carbon atoms?",
+                    options: ["2", "3", "4", "6"],
+                    answer: "4",
+                  },
+                  {
+                    id: "prop_q33",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "In graphite, each carbon atom is covalently bonded to how many other carbon atoms, leaving one electron delocalised?",
+                    options: ["2", "3", "4", "6"],
+                    answer: "3",
+                  },
+                  {
+                    id: "prop_q34",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "Which covalent network solid conducts electricity, unlike most others of its type?",
+                    options: ["Diamond", "Graphite", "Silicon dioxide", "Quartz"],
+                    answer: "Graphite",
+                  },
+                  {
+                    id: "prop_q35",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why is diamond extremely hard and does it have a very high melting point?",
+                    options: [
+                      "Strong covalent bonds extend throughout the whole 3D network, so a very large amount of force/energy is needed to break or deform it",
+                      "Diamond has weak intermolecular forces between separate molecules",
+                      "Diamond contains delocalised electrons that hold it together",
+                      "Diamond is an ionic lattice of carbon ions",
+                    ],
+                    answer: "Strong covalent bonds extend throughout the whole 3D network, so a very large amount of force/energy is needed to break or deform it",
+                  },
+                  {
+                    id: "prop_q36",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why does graphite conduct electricity while diamond does not, even though both are pure carbon?",
+                    options: [
+                      "Each carbon in graphite has one delocalised electron free to move through the layers, whereas every valence electron in diamond is tied up in a covalent bond",
+                      "Graphite is an ionic solid and diamond is not",
+                      "Diamond has more delocalised electrons than graphite",
+                      "Graphite has stronger covalent bonds than diamond",
+                    ],
+                    answer: "Each carbon in graphite has one delocalised electron free to move through the layers, whereas every valence electron in diamond is tied up in a covalent bond",
+                  },
+                  {
+                    id: "prop_q37",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why is graphite soft and slippery even though the covalent bonds within each layer are very strong?",
+                    options: [
+                      "The forces between the layers are weak, so the layers can slide over one another easily",
+                      "The covalent bonds within each layer are actually weak",
+                      "Graphite has no delocalised electrons",
+                      "Graphite is a molecular substance made of small separate molecules",
+                    ],
+                    answer: "The forces between the layers are weak, so the layers can slide over one another easily",
+                  },
+                  {
+                    id: "prop_q38",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "Concrete (containing SiO2, hardness ~6-7 Mohs, melting point ~1700°C) is generally chosen over bitumen (hardness ~2 Mohs, melting range 120-150°C) for heavy-duty roads. Which reasoning best justifies this?",
+                    options: [
+                      "SiO2's 3D covalent network makes it far harder and gives it a much higher melting point than bitumen, which is held together mainly by weak intermolecular forces, so it better resists deformation and heat",
+                      "Bitumen is an ionic solid and therefore always weaker than SiO2",
+                      "SiO2 conducts electricity, which makes it more durable",
+                      "Concrete and bitumen have identical bonding, so the choice is arbitrary",
+                    ],
+                    answer: "SiO2's 3D covalent network makes it far harder and gives it a much higher melting point than bitumen, which is held together mainly by weak intermolecular forces, so it better resists deformation and heat",
+                  },
+                  {
+                    id: "prop_q39",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "Diamond and graphite are both pure carbon, yet have very different properties. This is best explained by:",
+                    options: [
+                      "The same atoms arranged differently: diamond forms a rigid 3D network with no mobile electrons, while graphite forms weakly-bonded 2D layers with one delocalised electron per carbon",
+                      "Diamond and graphite are actually made of different elements",
+                      "Graphite has stronger covalent bonds throughout than diamond",
+                      "Diamond contains delocalised electrons that graphite lacks",
+                    ],
+                    answer: "The same atoms arranged differently: diamond forms a rigid 3D network with no mobile electrons, while graphite forms weakly-bonded 2D layers with one delocalised electron per carbon",
+                  },
+                ],
+              },
+              {
+                id: "prop-polymers",
+                name: "Polymers",
+                blurb: "Long chains, weak interchain forces, cross-linking, and chain alignment",
+                learn: [
+                  {
+                    band: 1,
+                    title: "Polymer structure",
+                    body: "A polymer is a long chain built from many repeating units called monomers, joined by strong covalent bonds within each chain. Between separate chains, only weak intermolecular forces act (unless cross-links join them).",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Why polymers are generally flexible",
+                        body: "The weak intermolecular forces between chains can be overcome relatively easily, letting chains slide past one another so the polymer can bend or be moulded — even though the covalent bonds within each chain stay strong.",
+                      },
+                      {
+                        band: 2,
+                        title: "Cross-linking and elasticity",
+                        body: "Some polymers have cross-links joining neighbouring chains. When stretched, cross-links limit how far chains move and pull them back toward their original shape, giving elasticity. Stronger, more numerous cross-links increase rigidity, strength, and resistance to heat.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 1,
+                    title: "Density, packing, and chain alignment",
+                    body: "Polymer properties depend heavily on how the chains are arranged, not just on their covalent bonding.",
+                    children: [
+                      {
+                        band: 2,
+                        title: "Chain packing affects density and melting point",
+                        body: "Straight, well-aligned chains pack closely, creating more intermolecular contact and requiring more energy to separate — giving higher density and melting point. Branched chains pack less efficiently, leaving more empty space and lowering density and melting point.",
+                      },
+                      {
+                        band: 2,
+                        title: "Chain alignment affects strength under load",
+                        body: "A force applied along the direction of the polymer chains is carried by strong covalent bonds and resists stretching well. A force applied across chains acts mainly on the weak intermolecular forces between them, so the material stretches and tears more easily.",
+                      },
+                    ],
+                  },
+                  {
+                    band: 3,
+                    title: "Evaluating polymer design for a use",
+                    body: "A polyethylene shopping bag resists tearing better when its chains are aligned with the direction of the load, since the load is then carried along strong covalent bonds rather than across weak intermolecular forces. Increasing cross-linking is a good design choice when a polymer needs to resist melting or softening at high temperature.",
+                  },
+                ],
+                questions: [
+                  {
+                    id: "prop_q40",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "A polymer is best described as:",
+                    options: [
+                      "A single small molecule",
+                      "A giant ionic lattice",
+                      "A long chain built from many repeating monomer units",
+                      "A metal cation surrounded by delocalised electrons",
+                    ],
+                    answer: "A long chain built from many repeating monomer units",
+                  },
+                  {
+                    id: "prop_q41",
+                    band: 1,
+                    type: "text",
+                    prompt: "What is the name for a small repeating building-block unit used to form a polymer?",
+                    answers: ["monomer", "monomers", "monomer unit"],
+                  },
+                  {
+                    id: "prop_q42",
+                    band: 1,
+                    type: "mcq",
+                    prompt: "Polymers are generally:",
+                    options: [
+                      "Excellent electrical conductors",
+                      "Poor electrical conductors",
+                      "Ionic solids",
+                      "Extremely hard, brittle solids",
+                    ],
+                    answer: "Poor electrical conductors",
+                  },
+                  {
+                    id: "prop_q43",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why are many polymers flexible?",
+                    options: [
+                      "Weak intermolecular forces between chains let the chains slide past one another, even though the covalent bonds within each chain are strong",
+                      "The covalent bonds within each chain are weak",
+                      "Polymers contain delocalised electrons that lubricate the chains",
+                      "Polymers are ionic and their ions slide freely",
+                    ],
+                    answer: "Weak intermolecular forces between chains let the chains slide past one another, even though the covalent bonds within each chain are strong",
+                  },
+                  {
+                    id: "prop_q44",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why can cross-linked polymers be elastic?",
+                    options: [
+                      "Cross-links between chains limit how far the chains can move when stretched and pull them back toward their original arrangement",
+                      "Cross-links break the covalent bonds within each chain",
+                      "Cross-links remove all intermolecular forces between chains",
+                      "Cross-links turn the polymer into an ionic lattice",
+                    ],
+                    answer: "Cross-links between chains limit how far the chains can move when stretched and pull them back toward their original arrangement",
+                  },
+                  {
+                    id: "prop_q45",
+                    band: 2,
+                    type: "mcq",
+                    prompt: "Why do straight, closely-packed polymer chains generally give a higher density and melting point than branched chains?",
+                    options: [
+                      "Straight chains pack more closely, creating more intermolecular contact/attractions that need more energy to overcome",
+                      "Branched chains always form stronger covalent bonds",
+                      "Straight chains contain delocalised electrons that branched chains lack",
+                      "Branching increases the number of monomers in each chain",
+                    ],
+                    answer: "Straight chains pack more closely, creating more intermolecular contact/attractions that need more energy to overcome",
+                  },
+                  {
+                    id: "prop_q46",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "A polyethylene shopping bag needs to carry weight downward without tearing. Should the polymer chains be aligned vertically or horizontally, and why?",
+                    options: [
+                      "Vertically, so the load is carried along the strong covalent bonds within the chains rather than across the weak intermolecular forces between them",
+                      "Horizontally, so the load is carried along the strong covalent bonds within the chains",
+                      "Vertically, because this maximises the weak intermolecular forces holding the bag together",
+                      "It makes no difference, since all polymer bonds are equally strong in every direction",
+                    ],
+                    answer: "Vertically, so the load is carried along the strong covalent bonds within the chains rather than across the weak intermolecular forces between them",
+                  },
+                  {
+                    id: "prop_q47",
+                    band: 3,
+                    type: "mcq",
+                    prompt: "A polymer needs to resist melting or softening at high temperature for use in a cookware handle. Which design choice would best achieve this?",
+                    options: [
+                      "Increase cross-linking between chains, since stronger covalent cross-links restrict chain sliding and increase rigidity and heat resistance",
+                      "Increase branching, since branched chains always melt at higher temperatures",
+                      "Remove all intermolecular forces between chains",
+                      "Shorten the chains so there are fewer monomers",
+                    ],
+                    answer: "Increase cross-linking between chains, since stronger covalent cross-links restrict chain sliding and increase rigidity and heat resistance",
                   },
                 ],
               },

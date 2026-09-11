@@ -9,7 +9,7 @@ decisions below. Read this before touching `app.jsx`.
 
 ## Current state
 
-- **Version:** 0.4.0 (in `APP_VERSION` in `app.jsx`, and matching
+- **Version:** 0.5.0 (in `APP_VERSION` in `app.jsx`, and matching
   `CACHE_NAME` in `sw.js`)
 - **Live now:** Science, all four areas (Biology, Chemistry, Physics,
   Earth & Space), 8 modules, 33 submodules, 145 questions total, all
@@ -269,6 +269,17 @@ synthetic "revise all" pseudo-object satisfy that shape.
 (Approximate band 1/2 split per area — exact counts depend on how many
 existing prompts happened to contain "why"; band 3 counts are exact,
 one per submodule.)
+
+**Stale note (post-v0.4.0):** a genetics/variation module (Biology) and a
+Physical Properties module (Chemistry, AS92023) were added after this
+table was written, and it was never refreshed for either — the row
+counts above under-count Biology and Chemistry. The Physical Properties
+module specifically (added in the v0.5.0 pass, sourced from
+`content/92023_NCEA_L1_CB1.4_Physical_Properties_AI_Summary.txt`) has 6
+submodules (intro, ionic, metallic/alloys, molecular, covalent network,
+polymers) and 47 questions, evenly built at 3/3/2 band-1/2/3 per
+submodule rather than the thin 1-question-per-band pattern described
+below — a full re-audit of this table is still owed.
 
 Content is loosely based on NCEA Level 1 Science's four knowledge
 strands (Biology / Chemistry / Physics / Earth & Space Science). It is
